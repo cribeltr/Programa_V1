@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gestión PMP 2026 — Hospital Hernán Henríquez Aravena</title>
+<style>
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 13px;
+  color: #1f2937;
+  background: #f3f4f6;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+
+/* ============================================================
+   PALETA INSTITUCIONAL
+   ============================================================ */
+:root {
+  --azul-primario: #1d4ed8;
+  --azul-oscuro:   #1e3a8a;
+  --azul-suave:    #dbeafe;
+  --gris-50:  #f9fafb;
+  --gris-100: #f3f4f6;
+  --gris-200: #e5e7eb;
+  --gris-300: #d1d5db;
+  --gris-400: #9ca3af;
+  --gris-500: #6b7280;
+  --gris-700: #374151;
+  --gris-900: #111827;
+  --verde:    #16a34a;
+  --verde-bg: #dcfce7;
+  --amarillo: #ca8a04;
+  --amarillo-bg: #fef9c3;
+  --naranja:  #ea580c;
+  --naranja-bg: #ffedd5;
+  --rojo:     #dc2626;
+  --rojo-bg:  #fee2e2;
+  --morado:   #7c3aed;
+  --morado-bg:#ede9fe;
+  --sombra-sm: 0 1px 2px rgba(0,0,0,.05);
+  --sombra-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+  --sombra-lg: 0 10px 25px -5px rgba(0,0,0,.15), 0 8px 10px -6px rgba(0,0,0,.1);
+}
+
+/* ============================================================
+   LAYOUT GENERAL
+   ============================================================ */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ---------- Header ---------- */
+.app-header {
+  background: var(--azul-oscuro);
+  color: #fff;
+  padding: 0 24px;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: var(--sombra-md);
+  position: sticky; top: 0; z-index: 50;
+}
+.app-header .brand { display: flex; align-items: center; gap: 12px; }
+.app-header .logo {
+  width: 32px; height: 32px; border-radius: 6px;
+  background: #fff; color: var(--azul-oscuro);
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 14px;
+}
+.app-header .titulo { font-size: 14px; font-weight: 600; letter-spacing: .2px; }
+.app-header .subtitulo { font-size: 11px; opacity: .75; }
+
+.tabs { display: flex; gap: 4px; }
+.tab {
+  padding: 8px 16px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,.75);
+  border-radius: 6px;
+  transition: all .15s ease;
+}
+.tab:hover { color: #fff; background: rgba(255,255,255,.08); }
+.tab.activa { color: var(--azul-oscuro); background: #fff; }
+
+.header-utils { display: flex; gap: 8px; }
+.btn-util {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 5px;
+  transition: all .15s ease;
+}
+.btn-util:hover { background: rgba(255,255,255,.12); }
+
+/* ---------- Contenedor principal ---------- */
+.main { flex: 1; padding: 16px 24px 24px; min-width: 1024px; }
+
+.vista { display: none; }
+.vista.activa { display: block; }
+
+/* ---------- Cabecera de vista ---------- */
+.vista-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 12px;
+}
+.vista-titulo h2 { font-size: 18px; font-weight: 600; color: var(--gris-900); }
+.vista-titulo p { font-size: 12px; color: var(--gris-500); margin-top: 2px; }
+
+/* ---------- Barra de filtros (inventario) ---------- */
+.filtros {
+  background: #fff;
+  padding: 12px 16px;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 12px;
+  box-shadow: var(--sombra-sm);
+}
+.filtros .campo { display: flex; flex-direction: column; gap: 4px; }
+.filtros label { font-size: 11px; font-weight: 600; color: var(--gris-700); text-transform: uppercase; letter-spacing: .5px; }
+.filtros input[type="text"] {
+  width: 220px;
+  padding: 7px 10px;
+  border: 1px solid var(--gris-300);
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.filtros input[type="text"]:focus {
+  outline: none;
+  border-color: var(--azul-primario);
+  box-shadow: 0 0 0 3px rgba(29,78,216,.15);
+}
+.filtros .contador {
+  margin-left: auto;
+  font-size: 12px; color: var(--gris-500);
+}
+.filtros .contador strong { color: var(--gris-900); }
+.btn {
+  padding: 7px 14px;
+  border-radius: 5px;
+  font-size: 12px; font-weight: 500;
+  transition: all .15s ease;
+}
+.btn-primario {
+  background: var(--azul-primario); color: #fff;
+}
+.btn-primario:hover { background: var(--azul-oscuro); }
+.btn-secundario {
+  background: #fff; color: var(--gris-700);
+  border: 1px solid var(--gris-300);
+}
+.btn-secundario:hover { background: var(--gris-50); border-color: var(--gris-400); }
+.btn-danger {
+  background: var(--rojo); color: #fff;
+}
+.btn-danger:hover { background: #b91c1c; }
+
+/* ============================================================
+   TABLAS
+   ============================================================ */
+.tabla-wrap {
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  overflow: auto;
+  box-shadow: var(--sombra-sm);
+  max-height: calc(100vh - 200px);
+}
+.tabla {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 12px;
+}
+.tabla th, .tabla td {
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--gris-200);
+  white-space: nowrap;
+}
+.tabla thead th {
+  background: var(--gris-100);
+  font-weight: 600;
+  color: var(--gris-700);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 2px solid var(--gris-300);
+}
+.tabla tbody tr:nth-child(even) { background: var(--gris-50); }
+.tabla tbody tr:hover { background: var(--azul-suave); }
+.tabla tbody tr.clickable { cursor: pointer; }
+
+/* Columnas congeladas (primeras N) */
+.tabla th.col-fija, .tabla td.col-fija {
+  position: sticky;
+  background: #fff;
+  z-index: 5;
+}
+.tabla tbody tr:nth-child(even) td.col-fija { background: var(--gris-50); }
+.tabla tbody tr:hover td.col-fija { background: var(--azul-suave); }
+.tabla thead th.col-fija { background: var(--gris-100); z-index: 15; }
+
+.col-fija-1 { left: 0;    min-width: 48px; }
+.col-fija-2 { left: 48px; min-width: 90px;  border-right: 1px solid var(--gris-200); }
+
+/* Meses */
+.col-mes {
+  text-align: center !important;
+  min-width: 46px;
+  font-weight: 600;
+}
+.col-mes-doble { min-width: 92px; }
+
+/* Celdas mensuales con código */
+.celda-mes {
+  text-align: center;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .3px;
+}
+.cod-X  { background: var(--azul-suave); color: var(--azul-oscuro); }
+.cod-R  { background: var(--amarillo-bg); color: var(--amarillo); }
+.cod-RA { background: var(--naranja-bg);  color: var(--naranja); }
+.cod-PM { background: var(--morado-bg);   color: var(--morado); }
+
+.res-Si    { background: var(--verde-bg); color: var(--verde); }
+.res-SiRA  { background: #bbf7d0;         color: #15803d; }
+.res-C     { background: var(--amarillo-bg); color: var(--amarillo); }
+.res-FS    { background: var(--rojo-bg);  color: var(--rojo); }
+.res-Baja  { background: #4b5563;         color: #fff; }
+.res-NU    { background: var(--gris-300); color: var(--gris-700); }
+
+/* Sub-headers de meses (vista registro) */
+.tabla thead .sub-header th {
+  font-size: 10px;
+  padding: 4px;
+  background: var(--gris-50);
+  border-bottom: 2px solid var(--gris-300);
+  top: 36px;
+}
+.tabla thead .grupo-mes th {
+  text-align: center;
+  border-bottom: 1px solid var(--gris-200);
+}
+
+/* ============================================================
+   LEYENDA DE CÓDIGOS
+   ============================================================ */
+.leyenda {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+.leyenda-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 4px;
+}
+.leyenda-cod {
+  display: inline-grid; place-items: center;
+  width: 26px; height: 18px;
+  font-weight: 700; font-size: 10px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   VISTA HISTORIAL DE EQUIPO
+   ============================================================ */
+.historial-cabecera {
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--sombra-sm);
+}
+.historial-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--azul-primario);
+  margin-bottom: 12px;
+}
+.historial-back:hover { text-decoration: underline; }
+.historial-cabecera h2 {
+  font-size: 18px; font-weight: 600; color: var(--gris-900);
+  margin-bottom: 4px;
+}
+.historial-cabecera .subtitulo { font-size: 13px; color: var(--gris-500); margin-bottom: 12px; }
+.historial-info {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gris-200);
+}
+.historial-info .dato {
+  display: flex; flex-direction: column;
+}
+.historial-info .dato .etiqueta {
+  font-size: 10px; color: var(--gris-500);
+  text-transform: uppercase; letter-spacing: .5px; font-weight: 600;
+}
+.historial-info .dato .valor { font-size: 13px; color: var(--gris-900); font-weight: 500; }
+
+.historial-meses {
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--sombra-sm);
+}
+.historial-meses table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.historial-meses th {
+  background: var(--gris-100);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .4px;
+  color: var(--gris-700);
+  padding: 10px;
+  text-align: center;
+  border-bottom: 2px solid var(--gris-300);
+}
+.historial-meses td {
+  text-align: center;
+  padding: 0;
+  border-bottom: 1px solid var(--gris-200);
+  border-right: 1px solid var(--gris-200);
+  vertical-align: middle;
+  height: 50px;
+}
+.historial-meses .etiqueta-fila {
+  background: var(--gris-50);
+  font-size: 11px; font-weight: 600;
+  color: var(--gris-700);
+  text-transform: uppercase; letter-spacing: .4px;
+  text-align: left; padding: 0 12px;
+  width: 130px;
+}
+.historial-meses .celda-prog {
+  font-weight: 700; font-size: 12px;
+}
+.historial-meses .celda-res {
+  cursor: pointer; font-weight: 700; font-size: 12px;
+  transition: background .15s ease;
+  position: relative;
+}
+.historial-meses .celda-res:hover {
+  outline: 2px solid var(--azul-primario);
+  outline-offset: -2px;
+}
+.historial-meses .celda-res .placeholder {
+  color: var(--gris-400); font-weight: 400; font-style: italic;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, .55);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 100;
+  animation: fadeIn .2s ease;
+}
+.modal-overlay.activo { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+
+.modal {
+  background: #fff;
+  border-radius: 10px;
+  width: 520px; max-width: 90vw;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow: var(--sombra-lg);
+  animation: scaleIn .2s ease;
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gris-200);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 { font-size: 16px; font-weight: 600; color: var(--gris-900); }
+.modal-header .cerrar {
+  font-size: 20px; color: var(--gris-500);
+  width: 28px; height: 28px;
+  border-radius: 4px;
+}
+.modal-header .cerrar:hover { background: var(--gris-100); color: var(--gris-900); }
+
+.modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+.modal-body .campo {
+  margin-bottom: 14px;
+}
+.modal-body .campo label {
+  display: block;
+  font-size: 12px; font-weight: 600;
+  color: var(--gris-700);
+  margin-bottom: 5px;
+}
+.modal-body .campo label .req { color: var(--rojo); }
+.modal-body input[type="date"],
+.modal-body select,
+.modal-body textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--gris-300);
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+}
+.modal-body input[type="date"]:focus,
+.modal-body select:focus,
+.modal-body textarea:focus {
+  outline: none;
+  border-color: var(--azul-primario);
+  box-shadow: 0 0 0 3px rgba(29,78,216,.15);
+}
+.modal-body textarea { resize: vertical; min-height: 60px; max-height: 140px; }
+.modal-body .toggles { display: flex; gap: 8px; }
+.modal-body .toggle {
+  flex: 1;
+  padding: 9px;
+  border: 1px solid var(--gris-300);
+  border-radius: 5px;
+  font-size: 13px; font-weight: 500;
+  color: var(--gris-700);
+  background: #fff;
+  transition: all .15s ease;
+}
+.modal-body .toggle:hover { background: var(--gris-50); }
+.modal-body .toggle.sel-verde { background: var(--verde); color: #fff; border-color: var(--verde); }
+.modal-body .toggle.sel-rojo  { background: var(--rojo);  color: #fff; border-color: var(--rojo); }
+
+.modal-body .ayuda {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--gris-700);
+  line-height: 1.5;
+  max-height: 120px; overflow-y: auto;
+}
+.modal-body .ayuda strong { color: var(--gris-900); }
+
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--gris-200);
+  display: flex; justify-content: flex-end; gap: 8px;
+  background: var(--gris-50);
+  border-radius: 0 0 10px 10px;
+}
+.modal-error {
+  background: var(--rojo-bg);
+  color: var(--rojo);
+  padding: 8px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  display: none;
+}
+.modal-error.activo { display: block; }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast-stack {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 200;
+}
+.toast {
+  background: var(--gris-900);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: var(--sombra-lg);
+  animation: slideIn .2s ease;
+  min-width: 240px;
+}
+.toast.exito { background: var(--verde); }
+.toast.error { background: var(--rojo); }
+@keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ============================================================
+   AYUDA
+   ============================================================ */
+.muted { color: var(--gris-500); }
+.text-center { text-align: center; }
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--gris-500);
+}
+.empty-state .icon { font-size: 36px; margin-bottom: 8px; opacity: .4; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============================================================
+       HEADER + NAVEGACIÓN
+       ============================================================ -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">PMP</div>
+      <div>
+        <div class="titulo">Gestión PMP 2026 — Hospital Hernán Henríquez Aravena</div>
+        <div class="subtitulo">Plan de Mantenimiento Preventivo de Equipos Biomédicos</div>
+      </div>
+    </div>
+    <nav class="tabs" id="nav-tabs">
+      <button class="tab" data-vista="pmp">PMP_2026</button>
+      <button class="tab" data-vista="registro">Registro_MP-2026</button>
+      <button class="tab activa" data-vista="inventario">Inventario</button>
+    </nav>
+    <div class="header-utils">
+      <button class="btn-util" id="btn-exportar">Exportar JSON</button>
+      <button class="btn-util" id="btn-resetear">Resetear datos demo</button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main class="main">
+
+    <!-- ===================== VISTA PMP_2026 ===================== -->
+    <section class="vista" id="vista-pmp">
+      <div class="vista-header">
+        <div class="vista-titulo">
+          <h2>Programación Anual PMP 2026</h2>
+          <p>Planificación mensual de mantenimientos preventivos por equipo.</p>
+        </div>
+      </div>
+      <div class="leyenda">
+        <span class="leyenda-item"><span class="leyenda-cod cod-X">X</span>Programado</span>
+        <span class="leyenda-item"><span class="leyenda-cod cod-R">R</span>Reprogramado</span>
+        <span class="leyenda-item"><span class="leyenda-cod cod-RA">RA</span>Reprogramado del año anterior</span>
+        <span class="leyenda-item"><span class="leyenda-cod cod-PM">PM</span>Puesta en marcha</span>
+      </div>
+      <div class="tabla-wrap" id="tabla-pmp-wrap"></div>
+    </section>
+
+    <!-- ===================== VISTA REGISTRO ===================== -->
+    <section class="vista" id="vista-registro">
+      <div class="vista-header">
+        <div class="vista-titulo">
+          <h2>Registro de Mantenciones MP 2026</h2>
+          <p>Programación (P) y resultado de ejecución (R) por mes y equipo.</p>
+        </div>
+      </div>
+      <div class="leyenda">
+        <span class="leyenda-item"><span class="leyenda-cod res-Si">Si</span>Realizado</span>
+        <span class="leyenda-item"><span class="leyenda-cod res-SiRA">Si-RA</span>Realizado año anterior</span>
+        <span class="leyenda-item"><span class="leyenda-cod res-C">C1-C8</span>Causal reprogramación</span>
+        <span class="leyenda-item"><span class="leyenda-cod res-FS">FS</span>Fuera de servicio</span>
+        <span class="leyenda-item"><span class="leyenda-cod res-Baja">Baja</span>Dado de baja</span>
+        <span class="leyenda-item"><span class="leyenda-cod res-NU">NU</span>No ubicable</span>
+      </div>
+      <div class="tabla-wrap" id="tabla-registro-wrap"></div>
+    </section>
+
+    <!-- ===================== VISTA INVENTARIO ===================== -->
+    <section class="vista activa" id="vista-inventario">
+      <div class="vista-header">
+        <div class="vista-titulo">
+          <h2>Inventario de Equipos Biomédicos</h2>
+          <p>Listado maestro. Click sobre un equipo para acceder al historial de mantenciones.</p>
+        </div>
+      </div>
+      <div class="filtros">
+        <div class="campo">
+          <label for="filtro-inv">Buscar por N° Inventario</label>
+          <input type="text" id="filtro-inv" placeholder="Ej: 345" autocomplete="off" />
+        </div>
+        <div class="campo">
+          <label for="filtro-serie">Buscar por Serie</label>
+          <input type="text" id="filtro-serie" placeholder="Ej: SN-2024" autocomplete="off" />
+        </div>
+        <button class="btn btn-secundario" id="btn-limpiar-filtros">Limpiar filtros</button>
+        <div class="contador" id="contador-inventario"></div>
+      </div>
+      <div class="tabla-wrap" id="tabla-inventario-wrap"></div>
+    </section>
+
+    <!-- ===================== VISTA HISTORIAL EQUIPO ===================== -->
+    <section class="vista" id="vista-historial">
+      <div class="historial-cabecera" id="historial-cabecera"></div>
+      <div class="historial-meses" id="historial-meses"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     MODAL REGISTRO DE RESULTADO
+     ============================================================ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-header">
+      <h3 id="modal-titulo">Registrar resultado</h3>
+      <button class="cerrar" id="modal-cerrar" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-error" id="modal-error"></div>
+
+      <div class="campo">
+        <label for="fld-fecha">Fecha de ejecución <span class="req">*</span></label>
+        <input type="date" id="fld-fecha" required />
+      </div>
+
+      <div class="campo">
+        <label>Estado del equipo <span class="req">*</span></label>
+        <div class="toggles">
+          <button type="button" class="toggle" data-estado="Operativo" id="tog-operativo">Operativo</button>
+          <button type="button" class="toggle" data-estado="No operativo" id="tog-no-operativo">No operativo</button>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="fld-ejecutor">Ejecutor <span class="req">*</span></label>
+        <select id="fld-ejecutor" required>
+          <option value="">— Seleccionar ejecutor —</option>
+          <option>Carlos Bahamondes Seguel</option>
+          <option>Cristián Beltrán Oviedo</option>
+          <option>Cristina Rozas Urrutia</option>
+          <option>Daniel Díaz Neira</option>
+          <option>Ignacio Berner Bergara</option>
+          <option>Macarena Toledo</option>
+          <option>Marco Ulloa</option>
+          <option>Matías Soazo Garrido</option>
+          <option>Personal externo</option>
+          <option>Ricardo Matus Aroca</option>
+          <option>Tito Millapán Riquelme</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="fld-resultado">Resultado de la mantención <span class="req">*</span></label>
+        <select id="fld-resultado" required>
+          <option value="">— Seleccionar resultado —</option>
+          <option value="Si">Si — Mantenimiento realizado</option>
+          <option value="Si-RA">Si-RA — Realizado correspondiente a año anterior</option>
+          <option value="C1">C1 — Imposibilidad de desocupar el equipo del paciente</option>
+          <option value="C2">C2 — Equipo en servicio técnico</option>
+          <option value="C3">C3 — Equipo no operativo, a la espera de repuestos</option>
+          <option value="C4">C4 — Equipo en préstamo a otra institución</option>
+          <option value="C5">C5 — No disponibilidad de HH funcionario SEC por carga laboral</option>
+          <option value="C6">C6 — No disponibilidad de HH del servicio técnico externo</option>
+          <option value="C7">C7 — Ausencia justificada del funcionario SEC superior a 15 días</option>
+          <option value="C8">C8 — Contingencia hospitalaria</option>
+          <option value="FS">FS — Fuera de servicio</option>
+          <option value="Baja">Baja — Equipo dado de baja</option>
+          <option value="NU">NU — No ubicable</option>
+        </select>
+        <div class="ayuda" id="ayuda-resultado">
+          <strong>Causales C1–C8:</strong>
+          C1 imposibilidad de desocupar del paciente · C2 en servicio técnico · C3 a la espera de repuestos ·
+          C4 en préstamo a otra institución · C5 sin HH SEC por carga laboral · C6 sin HH servicio externo ·
+          C7 ausencia justificada SEC >15 días · C8 contingencia hospitalaria.
+          <br><br>
+          <strong>Reprogramación automática:</strong> C1, C5, C6, C7 y C8 generan reprogramación (R)
+          dentro de los 30 días siguientes al mes original. C2, C3 y C4 no requieren mes destino.
+          <strong>Baja</strong> limpia los meses posteriores del año.
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="fld-observaciones">Observaciones</label>
+        <textarea id="fld-observaciones" maxlength="500" placeholder="Hasta 500 caracteres"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secundario" id="modal-cancelar">Cancelar</button>
+      <button class="btn btn-primario" id="modal-guardar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toast-stack"></div>
+
+<script>
+/* ============================================================================
+   MODELO DE DATOS Y CONSTANTES
+   ============================================================================ */
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const NOMBRE_MES = {
+  ene:'Enero', feb:'Febrero', mar:'Marzo', abr:'Abril', may:'Mayo', jun:'Junio',
+  jul:'Julio', ago:'Agosto', sep:'Septiembre', oct:'Octubre', nov:'Noviembre', dic:'Diciembre'
+};
+const CAUSALES_30D = ['C1','C5','C6','C7','C8'];   // generan R en mes siguiente
+const CAUSALES_LIBRES = ['C2','C3','C4'];          // sin mes destino fijo
+const STORAGE_KEY = 'pmp2026_estado_v1';
+
+/* Columnas de identificación comunes (vistas PMP y Registro) */
+const COLS_IDENT = [
+  { key:'id',                label:'ID' },
+  { key:'nCarpeta',          label:'N° Carpeta' },
+  { key:'nInventario',       label:'N° Inventario' },
+  { key:'equipo',            label:'Equipo' },
+  { key:'servicio',          label:'Servicio' },
+  { key:'unidad',            label:'Unidad' },
+  { key:'ubicacion',         label:'Ubicación' },
+  { key:'procedencia',       label:'Procedencia' },
+  { key:'marca',             label:'Marca' },
+  { key:'modelo',            label:'Modelo' },
+  { key:'serie',             label:'Serie' },
+  { key:'anioInstalacion',   label:'Año Inst.' },
+  { key:'vidaUtilResidual',  label:'V.U. Residual' },
+  { key:'clasificacion',     label:'Clasificación' },
+  { key:'enuBaja',           label:'ENU/Baja' },
+  { key:'observacion',       label:'Observación' },
+  { key:'frecuenciaMP',      label:'Frec. MP' },
+  { key:'responsableMP',     label:'Responsable MP' }
+];
+
+/* Columnas de inventario */
+const COLS_INVENTARIO = COLS_IDENT.filter(c =>
+  !['observacion','frecuenciaMP','responsableMP'].includes(c.key)
+);
+
+/* ============================================================================
+   DATOS DEMO
+   ============================================================================ */
+function generarDatosDemo() {
+  const equipos = [
+    { nCarpeta:'C-001', nInventario:'INV-10234', equipo:'Monitor Multiparamétrico', servicio:'UCI Adultos', unidad:'Cama 01', ubicacion:'Piso 4 - Ala Norte', procedencia:'Compra', marca:'Philips', modelo:'IntelliVue MX450', serie:'SN-PH-2022-0145', anioInstalacion:'2022', vidaUtilResidual:'8 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{ene:'X'} },
+    { nCarpeta:'C-002', nInventario:'INV-10235', equipo:'Monitor Multiparamétrico', servicio:'UCI Adultos', unidad:'Cama 02', ubicacion:'Piso 4 - Ala Norte', procedencia:'Compra', marca:'Philips', modelo:'IntelliVue MX450', serie:'SN-PH-2022-0146', anioInstalacion:'2022', vidaUtilResidual:'8 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{feb:'X'} },
+    { nCarpeta:'C-003', nInventario:'INV-10412', equipo:'Ventilador Mecánico', servicio:'UCI Adultos', unidad:'Cama 03', ubicacion:'Piso 4 - Ala Norte', procedencia:'Compra', marca:'Dräger', modelo:'Evita V500', serie:'SN-DR-2021-0078', anioInstalacion:'2021', vidaUtilResidual:'7 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Semestral', responsableMP:'Servicio Técnico Externo', prog:{mar:'X', sep:'X'} },
+    { nCarpeta:'C-004', nInventario:'INV-10413', equipo:'Ventilador Mecánico', servicio:'UCI Pediátrica', unidad:'Cama 01', ubicacion:'Piso 3 - Pediatría', procedencia:'Donación', marca:'Hamilton', modelo:'C3', serie:'SN-HM-2023-0021', anioInstalacion:'2023', vidaUtilResidual:'9 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Semestral', responsableMP:'Servicio Técnico Externo', prog:{abr:'X', oct:'X'} },
+    { nCarpeta:'C-005', nInventario:'INV-10567', equipo:'Desfibrilador', servicio:'Urgencias', unidad:'Box 01', ubicacion:'Planta Baja', procedencia:'Compra', marca:'ZOLL', modelo:'X Series', serie:'SN-ZL-2020-0345', anioInstalacion:'2020', vidaUtilResidual:'6 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{may:'X'} },
+    { nCarpeta:'C-006', nInventario:'INV-10568', equipo:'Desfibrilador', servicio:'Pabellón', unidad:'Quirófano 02', ubicacion:'Piso 2 - Pabellones', procedencia:'Compra', marca:'Philips', modelo:'HeartStart MRx', serie:'SN-PH-2019-0876', anioInstalacion:'2019', vidaUtilResidual:'5 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{jun:'X'} },
+    { nCarpeta:'C-007', nInventario:'INV-10721', equipo:'Máquina de Anestesia', servicio:'Pabellón', unidad:'Quirófano 01', ubicacion:'Piso 2 - Pabellones', procedencia:'Compra', marca:'Dräger', modelo:'Perseus A500', serie:'SN-DR-2022-0234', anioInstalacion:'2022', vidaUtilResidual:'8 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Semestral', responsableMP:'Servicio Técnico Externo', prog:{mar:'X', sep:'X'} },
+    { nCarpeta:'C-008', nInventario:'INV-10722', equipo:'Máquina de Anestesia', servicio:'Pabellón', unidad:'Quirófano 03', ubicacion:'Piso 2 - Pabellones', procedencia:'Compra', marca:'GE Healthcare', modelo:'Aisys CS2', serie:'SN-GE-2021-0567', anioInstalacion:'2021', vidaUtilResidual:'7 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Semestral', responsableMP:'Servicio Técnico Externo', prog:{abr:'X', oct:'X'} },
+    { nCarpeta:'C-009', nInventario:'INV-10891', equipo:'Incubadora Neonatal', servicio:'Neonatología', unidad:'Cuna 04', ubicacion:'Piso 3 - Neonatología', procedencia:'Compra', marca:'Dräger', modelo:'Babyleo TN500', serie:'SN-DR-2023-0098', anioInstalacion:'2023', vidaUtilResidual:'9 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{jul:'X'} },
+    { nCarpeta:'C-010', nInventario:'INV-10892', equipo:'Incubadora Neonatal', servicio:'Neonatología', unidad:'Cuna 05', ubicacion:'Piso 3 - Neonatología', procedencia:'Donación', marca:'GE Healthcare', modelo:'Giraffe OmniBed', serie:'SN-GE-2020-0432', anioInstalacion:'2020', vidaUtilResidual:'6 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'Ajustar sensor de humedad', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{ago:'X'} },
+    { nCarpeta:'C-011', nInventario:'INV-11045', equipo:'Máquina de Diálisis', servicio:'Hemodiálisis', unidad:'Puesto 03', ubicacion:'Piso 1 - Hemodiálisis', procedencia:'Compra', marca:'Fresenius', modelo:'5008S', serie:'SN-FR-2019-0654', anioInstalacion:'2019', vidaUtilResidual:'5 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Trimestral', responsableMP:'Servicio Técnico Externo', prog:{ene:'X', abr:'X', jul:'X', oct:'X'} },
+    { nCarpeta:'C-012', nInventario:'INV-11046', equipo:'Máquina de Diálisis', servicio:'Hemodiálisis', unidad:'Puesto 04', ubicacion:'Piso 1 - Hemodiálisis', procedencia:'Compra', marca:'Fresenius', modelo:'5008S', serie:'SN-FR-2019-0655', anioInstalacion:'2019', vidaUtilResidual:'5 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Trimestral', responsableMP:'Servicio Técnico Externo', prog:{feb:'X', may:'X', ago:'X', nov:'X'} },
+    { nCarpeta:'C-013', nInventario:'INV-11210', equipo:'Bomba de Infusión', servicio:'UCI Adultos', unidad:'Cama 01', ubicacion:'Piso 4 - Ala Norte', procedencia:'Compra', marca:'B. Braun', modelo:'Perfusor Space', serie:'SN-BB-2022-1234', anioInstalacion:'2022', vidaUtilResidual:'8 años', clasificacion:'Importante', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{sep:'X'} },
+    { nCarpeta:'C-014', nInventario:'INV-11211', equipo:'Bomba de Infusión', servicio:'Oncología', unidad:'Sala 02', ubicacion:'Piso 5 - Oncología', procedencia:'Donación', marca:'B. Braun', modelo:'Infusomat Space', serie:'SN-BB-2021-0987', anioInstalacion:'2021', vidaUtilResidual:'7 años', clasificacion:'Importante', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{oct:'X'} },
+    { nCarpeta:'C-015', nInventario:'INV-11345', equipo:'Electrocardiógrafo', servicio:'Cardiología', unidad:'Box 01', ubicacion:'Piso 2 - Cardiología', procedencia:'Compra', marca:'Schiller', modelo:'CARDIOVIT AT-102', serie:'SN-SC-2020-0123', anioInstalacion:'2020', vidaUtilResidual:'6 años', clasificacion:'Importante', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{nov:'X'} },
+    { nCarpeta:'C-016', nInventario:'INV-11346', equipo:'Electrocardiógrafo', servicio:'Urgencias', unidad:'Box 03', ubicacion:'Planta Baja', procedencia:'Compra', marca:'GE Healthcare', modelo:'MAC 2000', serie:'SN-GE-2018-0445', anioInstalacion:'2018', vidaUtilResidual:'4 años', clasificacion:'Importante', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{dic:'X'} },
+    { nCarpeta:'C-017', nInventario:'INV-11502', equipo:'Aspirador de Secreciones', servicio:'UCI Pediátrica', unidad:'Cama 02', ubicacion:'Piso 3 - Pediatría', procedencia:'Compra', marca:'Medela', modelo:'Vario 18 c/i', serie:'SN-MD-2023-0567', anioInstalacion:'2023', vidaUtilResidual:'9 años', clasificacion:'Estándar', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{ene:'RA'} },
+    { nCarpeta:'C-018', nInventario:'INV-11650', equipo:'Cuna de Calor Radiante', servicio:'Neonatología', unidad:'Cuna 01', ubicacion:'Piso 3 - Neonatología', procedencia:'Compra', marca:'Dräger', modelo:'Babytherm 8000', serie:'SN-DR-2024-0089', anioInstalacion:'2024', vidaUtilResidual:'10 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'Equipo nuevo recientemente instalado', frecuenciaMP:'Anual', responsableMP:'Servicio Técnico Externo', prog:{feb:'PM'} },
+    { nCarpeta:'C-019', nInventario:'INV-11788', equipo:'Bomba de Infusión', servicio:'Pediatría', unidad:'Sala 05', ubicacion:'Piso 3 - Pediatría', procedencia:'Compra', marca:'B. Braun', modelo:'Perfusor Space', serie:'SN-BB-2022-1235', anioInstalacion:'2022', vidaUtilResidual:'8 años', clasificacion:'Importante', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{jun:'X'} },
+    { nCarpeta:'C-020', nInventario:'INV-11902', equipo:'Monitor Multiparamétrico', servicio:'Urgencias', unidad:'Box 02', ubicacion:'Planta Baja', procedencia:'Compra', marca:'Mindray', modelo:'BeneVision N15', serie:'SN-MR-2021-0345', anioInstalacion:'2021', vidaUtilResidual:'7 años', clasificacion:'Crítico', enuBaja:'Operativo', observacion:'', frecuenciaMP:'Anual', responsableMP:'SEC Interno', prog:{jul:'X'} }
+  ];
+
+  const equiposNorm = equipos.map((e, idx) => {
+    const programacion = {};
+    MESES.forEach(m => { programacion[m] = e.prog[m] || ''; });
+    const obj = { id: idx + 1 };
+    COLS_IDENT.forEach(c => {
+      if (c.key !== 'id') obj[c.key] = e[c.key] || '';
+    });
+    obj.programacion = programacion;
+    return obj;
+  });
+
+  return { equipos: equiposNorm, registros: [] };
+}
+
+/* ============================================================================
+   ESTADO GLOBAL Y PERSISTENCIA
+   ============================================================================ */
+let estado = cargarEstado();
+
+function cargarEstado() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { console.warn('Error leyendo estado, se reinicia.', e); }
+  return generarDatosDemo();
+}
+
+function guardarEstado() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+}
+
+function resetearDemo() {
+  if (confirm('¿Resetear todos los datos a los valores demo? Se perderán los registros guardados.')) {
+    estado = generarDatosDemo();
+    guardarEstado();
+    renderTodo();
+    toast('Datos demo restaurados', 'exito');
+  }
+}
+
+function exportarJSON() {
+  const blob = new Blob([JSON.stringify(estado, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `pmp2026_export_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('JSON exportado', 'exito');
+}
+
+/* ============================================================================
+   UTILIDADES
+   ============================================================================ */
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function clasePorCodigo(cod) {
+  if (!cod) return '';
+  if (['X','R','RA','PM'].includes(cod)) return 'cod-' + cod;
+  return '';
+}
+
+function clasePorResultado(res) {
+  if (!res) return '';
+  if (res === 'Si') return 'res-Si';
+  if (res === 'Si-RA') return 'res-SiRA';
+  if (/^C[1-8]$/.test(res)) return 'res-C';
+  if (res === 'FS') return 'res-FS';
+  if (res === 'Baja') return 'res-Baja';
+  if (res === 'NU') return 'res-NU';
+  return '';
+}
+
+function ultimoRegistro(equipoId, mes) {
+  // Filtra registros de ese equipo+mes y devuelve el más reciente por fechaCreacion
+  const regs = estado.registros.filter(r => r.equipoId === equipoId && r.mes === mes);
+  if (!regs.length) return null;
+  return regs.reduce((a,b) => (a.fechaCreacion > b.fechaCreacion ? a : b));
+}
+
+function mesSiguiente(mesKey) {
+  const idx = MESES.indexOf(mesKey);
+  if (idx < 0 || idx >= MESES.length - 1) return null;
+  return MESES[idx + 1];
+}
+
+function toast(msg, tipo = '') {
+  const stack = document.getElementById('toast-stack');
+  const el = document.createElement('div');
+  el.className = 'toast ' + tipo;
+  el.textContent = msg;
+  stack.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(20px)'; el.style.transition = 'all .2s ease'; }, 2400);
+  setTimeout(() => el.remove(), 2700);
+}
+
+/* ============================================================================
+   NAVEGACIÓN ENTRE VISTAS
+   ============================================================================ */
+function mostrarVista(nombre) {
+  document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('activa'));
+  if (nombre === 'historial') {
+    document.getElementById('vista-historial').classList.add('activa');
+    // Mantener tab inventario activa mientras se ve historial
+    document.querySelector('.tab[data-vista="inventario"]').classList.add('activa');
+    return;
+  }
+  document.getElementById('vista-' + nombre).classList.add('activa');
+  const tab = document.querySelector(`.tab[data-vista="${nombre}"]`);
+  if (tab) tab.classList.add('activa');
+}
+
+document.getElementById('nav-tabs').addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (!t) return;
+  const vista = t.dataset.vista;
+  mostrarVista(vista);
+  if (vista === 'pmp') renderPMP();
+  if (vista === 'registro') renderRegistro();
+  if (vista === 'inventario') renderInventario();
+});
+
+/* ============================================================================
+   RENDER — VISTA PMP_2026
+   ============================================================================ */
+function renderPMP() {
+  const wrap = document.getElementById('tabla-pmp-wrap');
+  let html = '<table class="tabla"><thead><tr>';
+
+  COLS_IDENT.forEach((c, i) => {
+    const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+    html += `<th class="${fija}">${escapeHtml(c.label)}</th>`;
+  });
+  MESES.forEach(m => {
+    html += `<th class="col-mes">${m.charAt(0).toUpperCase() + m.slice(1)}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  estado.equipos.forEach(eq => {
+    html += '<tr>';
+    COLS_IDENT.forEach((c, i) => {
+      const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+      html += `<td class="${fija}">${escapeHtml(eq[c.key])}</td>`;
+    });
+    MESES.forEach(m => {
+      const cod = eq.programacion[m] || '';
+      html += `<td class="celda-mes ${clasePorCodigo(cod)}">${escapeHtml(cod)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+/* ============================================================================
+   RENDER — VISTA REGISTRO_MP-2026
+   ============================================================================ */
+function renderRegistro() {
+  const wrap = document.getElementById('tabla-registro-wrap');
+  let html = '<table class="tabla"><thead>';
+
+  // Fila 1: identificación + meses (colspan 2)
+  html += '<tr class="grupo-mes">';
+  COLS_IDENT.forEach((c, i) => {
+    const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+    html += `<th class="${fija}" rowspan="2">${escapeHtml(c.label)}</th>`;
+  });
+  MESES.forEach(m => {
+    html += `<th class="col-mes col-mes-doble" colspan="2">${m.charAt(0).toUpperCase() + m.slice(1)}</th>`;
+  });
+  html += '</tr>';
+
+  // Fila 2: subheaders P / R
+  html += '<tr class="sub-header">';
+  MESES.forEach(() => {
+    html += `<th class="col-mes">P</th><th class="col-mes">R</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  estado.equipos.forEach(eq => {
+    html += '<tr>';
+    COLS_IDENT.forEach((c, i) => {
+      const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+      html += `<td class="${fija}">${escapeHtml(eq[c.key])}</td>`;
+    });
+    MESES.forEach(m => {
+      const cod = eq.programacion[m] || '';
+      const reg = ultimoRegistro(eq.id, m);
+      const res = reg ? reg.resultado : '';
+      html += `<td class="celda-mes ${clasePorCodigo(cod)}">${escapeHtml(cod)}</td>`;
+      html += `<td class="celda-mes ${clasePorResultado(res)}">${escapeHtml(res)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+/* ============================================================================
+   RENDER — VISTA INVENTARIO
+   ============================================================================ */
+function renderInventario() {
+  const filtroInv = document.getElementById('filtro-inv').value.trim().toLowerCase();
+  const filtroSerie = document.getElementById('filtro-serie').value.trim().toLowerCase();
+
+  const filtrados = estado.equipos.filter(eq => {
+    const okInv = !filtroInv || (eq.nInventario || '').toLowerCase().includes(filtroInv);
+    const okSer = !filtroSerie || (eq.serie || '').toLowerCase().includes(filtroSerie);
+    return okInv && okSer;
+  });
+
+  document.getElementById('contador-inventario').innerHTML =
+    `Mostrando <strong>${filtrados.length}</strong> de <strong>${estado.equipos.length}</strong> equipos`;
+
+  const wrap = document.getElementById('tabla-inventario-wrap');
+  if (!filtrados.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="icon">⌕</div>Sin resultados para los filtros aplicados.</div>';
+    return;
+  }
+
+  let html = '<table class="tabla"><thead><tr>';
+  COLS_INVENTARIO.forEach((c, i) => {
+    const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+    html += `<th class="${fija}">${escapeHtml(c.label)}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  filtrados.forEach(eq => {
+    html += `<tr class="clickable" data-equipo="${eq.id}">`;
+    COLS_INVENTARIO.forEach((c, i) => {
+      const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
+      html += `<td class="${fija}">${escapeHtml(eq[c.key])}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+
+  // Bind click en filas
+  wrap.querySelectorAll('tr.clickable').forEach(tr => {
+    tr.addEventListener('click', () => abrirHistorial(parseInt(tr.dataset.equipo, 10)));
+  });
+}
+
+document.getElementById('filtro-inv').addEventListener('input', renderInventario);
+document.getElementById('filtro-serie').addEventListener('input', renderInventario);
+document.getElementById('btn-limpiar-filtros').addEventListener('click', () => {
+  document.getElementById('filtro-inv').value = '';
+  document.getElementById('filtro-serie').value = '';
+  renderInventario();
+});
+
+/* ============================================================================
+   RENDER — VISTA HISTORIAL DE EQUIPO
+   ============================================================================ */
+let equipoHistorialId = null;
+
+function abrirHistorial(equipoId) {
+  equipoHistorialId = equipoId;
+  renderHistorial();
+  mostrarVista('historial');
+}
+
+function renderHistorial() {
+  const eq = estado.equipos.find(e => e.id === equipoHistorialId);
+  if (!eq) return;
+
+  const cab = document.getElementById('historial-cabecera');
+  cab.innerHTML = `
+    <a class="historial-back" id="link-volver">&larr; Volver al inventario</a>
+    <h2>${escapeHtml(eq.equipo)}</h2>
+    <div class="subtitulo">Historial de mantenciones 2026</div>
+    <div class="historial-info">
+      <div class="dato"><span class="etiqueta">N° Inventario</span><span class="valor">${escapeHtml(eq.nInventario)}</span></div>
+      <div class="dato"><span class="etiqueta">Marca</span><span class="valor">${escapeHtml(eq.marca)}</span></div>
+      <div class="dato"><span class="etiqueta">Modelo</span><span class="valor">${escapeHtml(eq.modelo)}</span></div>
+      <div class="dato"><span class="etiqueta">Serie</span><span class="valor">${escapeHtml(eq.serie)}</span></div>
+      <div class="dato"><span class="etiqueta">Servicio</span><span class="valor">${escapeHtml(eq.servicio)}</span></div>
+      <div class="dato"><span class="etiqueta">Unidad</span><span class="valor">${escapeHtml(eq.unidad)}</span></div>
+      <div class="dato"><span class="etiqueta">Ubicación</span><span class="valor">${escapeHtml(eq.ubicacion)}</span></div>
+      <div class="dato"><span class="etiqueta">Frecuencia MP</span><span class="valor">${escapeHtml(eq.frecuenciaMP)}</span></div>
+    </div>
+  `;
+  document.getElementById('link-volver').addEventListener('click', e => {
+    e.preventDefault();
+    mostrarVista('inventario');
+    renderInventario();
+  });
+
+  const meses = document.getElementById('historial-meses');
+  let html = '<table><thead><tr><th class="etiqueta-fila">&nbsp;</th>';
+  MESES.forEach(m => {
+    html += `<th>${m.charAt(0).toUpperCase() + m.slice(1)}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  // Fila Programación
+  html += '<tr><td class="etiqueta-fila">Programación</td>';
+  MESES.forEach(m => {
+    const cod = eq.programacion[m] || '';
+    html += `<td class="celda-prog ${clasePorCodigo(cod)}">${escapeHtml(cod) || '<span class="placeholder">—</span>'}</td>`;
+  });
+  html += '</tr>';
+
+  // Fila Resultado
+  html += '<tr><td class="etiqueta-fila">Resultado</td>';
+  MESES.forEach(m => {
+    const reg = ultimoRegistro(eq.id, m);
+    const res = reg ? reg.resultado : '';
+    html += `<td class="celda-res ${clasePorResultado(res)}" data-mes="${m}">${
+      escapeHtml(res) || '<span class="placeholder">Registrar</span>'
+    }</td>`;
+  });
+  html += '</tr></tbody></table>';
+  meses.innerHTML = html;
+
+  meses.querySelectorAll('.celda-res').forEach(td => {
+    td.addEventListener('click', () => abrirModal(eq.id, td.dataset.mes));
+  });
+}
+
+/* ============================================================================
+   MODAL — REGISTRO DE RESULTADO
+   ============================================================================ */
+const modal = document.getElementById('modal-overlay');
+let modalEquipoId = null;
+let modalMes = null;
+let modalEstadoEquipo = null;
+
+function abrirModal(equipoId, mes) {
+  modalEquipoId = equipoId;
+  modalMes = mes;
+  const eq = estado.equipos.find(e => e.id === equipoId);
+  const reg = ultimoRegistro(equipoId, mes);
+
+  document.getElementById('modal-titulo').textContent =
+    `Registrar resultado — ${NOMBRE_MES[mes]} 2026 · ${eq.equipo} (${eq.nInventario})`;
+
+  // Precargar si hay registro previo, si no, valores por defecto
+  document.getElementById('fld-fecha').value = reg?.fechaEjecucion || `2026-${String(MESES.indexOf(mes)+1).padStart(2,'0')}-15`;
+  document.getElementById('fld-ejecutor').value = reg?.ejecutor || '';
+  document.getElementById('fld-resultado').value = reg?.resultado || '';
+  document.getElementById('fld-observaciones').value = reg?.observaciones || '';
+  modalEstadoEquipo = reg?.estadoEquipo || null;
+  pintarToggleEstado();
+  ocultarError();
+
+  modal.classList.add('activo');
+  setTimeout(() => document.getElementById('fld-fecha').focus(), 80);
+}
+
+function cerrarModal() {
+  modal.classList.remove('activo');
+  modalEquipoId = null;
+  modalMes = null;
+  modalEstadoEquipo = null;
+}
+
+function pintarToggleEstado() {
+  const ops = document.getElementById('tog-operativo');
+  const nop = document.getElementById('tog-no-operativo');
+  ops.classList.remove('sel-verde');
+  nop.classList.remove('sel-rojo');
+  if (modalEstadoEquipo === 'Operativo') ops.classList.add('sel-verde');
+  if (modalEstadoEquipo === 'No operativo') nop.classList.add('sel-rojo');
+}
+
+function mostrarError(msg) {
+  const e = document.getElementById('modal-error');
+  e.textContent = msg;
+  e.classList.add('activo');
+}
+function ocultarError() {
+  document.getElementById('modal-error').classList.remove('activo');
+}
+
+document.getElementById('tog-operativo').addEventListener('click', () => {
+  modalEstadoEquipo = 'Operativo'; pintarToggleEstado();
+});
+document.getElementById('tog-no-operativo').addEventListener('click', () => {
+  modalEstadoEquipo = 'No operativo'; pintarToggleEstado();
+});
+
+document.getElementById('modal-cerrar').addEventListener('click', cerrarModal);
+document.getElementById('modal-cancelar').addEventListener('click', cerrarModal);
+
+modal.addEventListener('click', e => {
+  if (e.target === modal) cerrarModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && modal.classList.contains('activo')) cerrarModal();
+});
+
+document.getElementById('modal-guardar').addEventListener('click', guardarRegistro);
+
+/* ============================================================================
+   GUARDAR REGISTRO + REGLAS DE NEGOCIO
+   ============================================================================ */
+function guardarRegistro() {
+  ocultarError();
+  const fecha = document.getElementById('fld-fecha').value;
+  const ejecutor = document.getElementById('fld-ejecutor').value;
+  const resultado = document.getElementById('fld-resultado').value;
+  const observaciones = document.getElementById('fld-observaciones').value.trim();
+
+  if (!fecha) return mostrarError('Debe ingresar la fecha de ejecución.');
+  if (!modalEstadoEquipo) return mostrarError('Debe indicar el estado del equipo (Operativo / No operativo).');
+  if (!ejecutor) return mostrarError('Debe seleccionar un ejecutor.');
+  if (!resultado) return mostrarError('Debe seleccionar el resultado de la mantención.');
+
+  // Sustituir cualquier registro previo del mismo equipo+mes
+  estado.registros = estado.registros.filter(r => !(r.equipoId === modalEquipoId && r.mes === modalMes));
+  estado.registros.push({
+    equipoId: modalEquipoId,
+    mes: modalMes,
+    fechaEjecucion: fecha,
+    estadoEquipo: modalEstadoEquipo,
+    ejecutor: ejecutor,
+    resultado: resultado,
+    observaciones: observaciones,
+    fechaCreacion: new Date().toISOString()
+  });
+
+  aplicarReglasNegocio(modalEquipoId, modalMes, resultado);
+
+  guardarEstado();
+  renderTodo();
+  cerrarModal();
+  toast(`Resultado guardado: ${NOMBRE_MES[modalMes]} → ${resultado}`, 'exito');
+}
+
+/**
+ * Aplica las reglas de reprogramación / propagación según el resultado:
+ * - C1, C5, C6, C7, C8 → marcar R en mes siguiente (mantener X+causal en mes original).
+ * - C2, C3, C4 → sin mes destino fijo (no se altera la programación).
+ * - Si → no altera programación.
+ * - Si-RA → marca el código RA en el mes original si estaba vacío.
+ * - FS, NU → solo afectan el mes detectado.
+ * - Baja → limpia meses posteriores del año para ese equipo.
+ */
+function aplicarReglasNegocio(equipoId, mes, resultado) {
+  const eq = estado.equipos.find(e => e.id === equipoId);
+  if (!eq) return;
+
+  if (CAUSALES_30D.includes(resultado)) {
+    const siguiente = mesSiguiente(mes);
+    if (siguiente) {
+      // Marcar R en mes siguiente solo si no hay ya algo planificado
+      if (!eq.programacion[siguiente] || eq.programacion[siguiente] === '') {
+        eq.programacion[siguiente] = 'R';
+      }
+    }
+    return;
+  }
+
+  if (CAUSALES_LIBRES.includes(resultado)) {
+    // No tocar programación. La mantención se registrará cuando se ejecute.
+    return;
+  }
+
+  if (resultado === 'Baja') {
+    eq.enuBaja = 'Baja';
+    const idx = MESES.indexOf(mes);
+    for (let i = idx + 1; i < MESES.length; i++) {
+      eq.programacion[MESES[i]] = '';
+      // Eliminar registros futuros
+      estado.registros = estado.registros.filter(r => !(r.equipoId === equipoId && r.mes === MESES[i]));
+    }
+    return;
+  }
+
+  if (resultado === 'Si-RA') {
+    if (!eq.programacion[mes]) eq.programacion[mes] = 'RA';
+    return;
+  }
+
+  // 'Si', 'FS', 'NU' → no propagan
+}
+
+/* ============================================================================
+   BOTONES UTILIDAD HEADER
+   ============================================================================ */
+document.getElementById('btn-exportar').addEventListener('click', exportarJSON);
+document.getElementById('btn-resetear').addEventListener('click', resetearDemo);
+
+/* ============================================================================
+   RENDER GLOBAL
+   ============================================================================ */
+function renderTodo() {
+  renderPMP();
+  renderRegistro();
+  renderInventario();
+  if (document.getElementById('vista-historial').classList.contains('activa')) {
+    renderHistorial();
+  }
+}
+
+// Render inicial
+renderTodo();
+</script>
+</body>
+</html>
