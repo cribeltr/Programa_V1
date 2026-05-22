@@ -2661,6 +2661,59 @@ async function procesarArchivoImport(file) {
    - Parsea sharedStrings.xml y la primera worksheet
    - Construye filas y mapea por encabezado a las columnas del modelo
    ============================================================================ */
+/* Normaliza un encabezado para buscarlo en el mapa:
+   - minúsculas
+   - quita acentos (NFD)
+   - colapsa espacios múltiples
+   - elimina espacios alrededor de "/" y "."
+   - trim final */
+function normalizarHeader(s) {
+  return (s || '').toString()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .toLowerCase()
+    .replace(/\s*\/\s*/g, '/')
+    .replace(/\s*\.\s*/g, '.')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/* Mapa de encabezados normalizados → clave del modelo */
+const MAPA_HEADERS = {
+  'fam':null, 'familia':null, 'pmp':null, 'mp-r':null, 'mp-ra':null, // columnas a ignorar
+  'id':'id',
+  'n carpeta':'nCarpeta','no carpeta':'nCarpeta','n° carpeta':'nCarpeta','carpeta':'nCarpeta',
+  'n inventario':'nInventario','no inventario':'nInventario','n° inventario':'nInventario','inventario':'nInventario',
+  'equipo':'equipo','servicio':'servicio','unidad':'unidad',
+  'ubicacion':'ubicacion',
+  'procedencia':'procedencia','marca':'marca','modelo':'modelo','serie':'serie',
+  'ano instalacion':'anioInstalacion','año instalacion':'anioInstalacion','anio instalacion':'anioInstalacion',
+  'vida util residual':'vidaUtilResidual','v.u. residual':'vidaUtilResidual','vu residual':'vidaUtilResidual',
+  'clasificacion':'clasificacion',
+  'enu/baja':'enuBaja','enu baja':'enuBaja','enu':'enuBaja','baja':'enuBaja',
+  'observacion':'observacion','observaciones':'observacion',
+  'frecuencia mp':'frecuenciaMP','frec mp':'frecuenciaMP','frec.mp':'frecuenciaMP',
+  'responsable mp':'responsableMP','responsable':'responsableMP',
+  'estado':'estado','estado equipo':'estado','estado del equipo':'estado',
+  'ene':'ene','enero':'ene','feb':'feb','febrero':'feb','mar':'mar','marzo':'mar',
+  'abr':'abr','abril':'abr','may':'may','mayo':'may','jun':'jun','junio':'jun',
+  'jul':'jul','julio':'jul','ago':'ago','agosto':'ago','sep':'sep','sept':'sep','septiembre':'sep',
+  'oct':'oct','octubre':'oct','nov':'nov','noviembre':'nov','dic':'dic','diciembre':'dic'
+};
+
+/* Tokens "fuertes" para detectar la fila de encabezados */
+const HEADER_TOKENS = ['id','n° inventario','n inventario','inventario','equipo','servicio',
+  'marca','modelo','serie','ene','feb','mar','abr'];
+
+function puntajeFilaEncabezados(fila) {
+  let score = 0;
+  fila.forEach(c => {
+    const n = normalizarHeader(c);
+    if (!n) return;
+    if (MAPA_HEADERS.hasOwnProperty(n) && MAPA_HEADERS[n] != null) score++;
+  });
+  return score;
+}
+
 async function importarXLSX(arrayBuffer) {
   const archivos = await unzip(arrayBuffer);
   const ss = archivos['xl/sharedStrings.xml'] ? leerStrings(archivos['xl/sharedStrings.xml']) : [];
@@ -2671,30 +2724,27 @@ async function importarXLSX(arrayBuffer) {
   const filas = parsearWorksheet(archivos[wsKey], ss);
   if (!filas.length) throw new Error('La hoja está vacía.');
 
-  // Heurística: primera fila = encabezados
-  const headers = filas[0].map(h => (h || '').toString().trim());
-  const datos = filas.slice(1).filter(f => f.some(c => (c || '').toString().trim()));
+  // Buscar la fila de encabezados: la primera con score >= 5
+  let headerRowIdx = -1;
+  for (let i = 0; i < Math.min(filas.length, 30); i++) {
+    if (puntajeFilaEncabezados(filas[i]) >= 5) { headerRowIdx = i; break; }
+  }
+  if (headerRowIdx < 0) {
+    // Reporte diagnóstico para ayudar al usuario
+    const muestra = filas.slice(0, 10).map((f, i) =>
+      `Fila ${i+1}: ${f.slice(0,8).map(c => (c || '').toString().trim()).join(' | ').slice(0,160)}`
+    ).join('<br>');
+    throw new Error('No se encontró una fila de encabezados reconocible. Primeras filas detectadas:<br><br>' + muestra);
+  }
 
-  // Mapeo flexible de encabezados a claves del modelo
-  const mapa = {
-    'id':'id', 'n° carpeta':'nCarpeta', 'no carpeta':'nCarpeta', 'n carpeta':'nCarpeta',
-    'n° inventario':'nInventario', 'no inventario':'nInventario', 'n inventario':'nInventario', 'inventario':'nInventario',
-    'equipo':'equipo', 'servicio':'servicio', 'unidad':'unidad', 'ubicación':'ubicacion', 'ubicacion':'ubicacion',
-    'procedencia':'procedencia', 'marca':'marca', 'modelo':'modelo', 'serie':'serie',
-    'año instalación':'anioInstalacion','año instalacion':'anioInstalacion','anio instalacion':'anioInstalacion',
-    'vida útil residual':'vidaUtilResidual','vida util residual':'vidaUtilResidual','v.u. residual':'vidaUtilResidual',
-    'clasificación':'clasificacion','clasificacion':'clasificacion',
-    'enu/baja':'enuBaja','enu':'enuBaja','baja':'enuBaja',
-    'observación':'observacion','observacion':'observacion',
-    'frecuencia mp':'frecuenciaMP','frec. mp':'frecuenciaMP','frec mp':'frecuenciaMP',
-    'responsable mp':'responsableMP','responsable':'responsableMP',
-    'estado':'estado','estado equipo':'estado',
-    'ene':'ene','enero':'ene','feb':'feb','febrero':'feb','mar':'mar','marzo':'mar',
-    'abr':'abr','abril':'abr','may':'may','mayo':'may','jun':'jun','junio':'jun',
-    'jul':'jul','julio':'jul','ago':'ago','agosto':'ago','sep':'sep','sept':'sep','septiembre':'sep',
-    'oct':'oct','octubre':'oct','nov':'nov','noviembre':'nov','dic':'dic','diciembre':'dic'
-  };
-  const indices = headers.map(h => mapa[h.toLowerCase()] || null);
+  const headers = filas[headerRowIdx].map(h => normalizarHeader(h));
+  const datos = filas.slice(headerRowIdx + 1).filter(f => f.some(c => (c || '').toString().trim()));
+
+  const indices = headers.map(h => MAPA_HEADERS[h] || null);
+
+  // Estadísticas para diagnóstico
+  const reconocidas = headers.map((h,i) => indices[i] ? null : h).filter(Boolean);
+  const reconocidasOk = headers.map((h,i) => indices[i] ? h : null).filter(Boolean);
 
   const equiposImportados = [];
   datos.forEach((fila, idx) => {
@@ -2719,15 +2769,23 @@ async function importarXLSX(arrayBuffer) {
     if (eq.nInventario || eq.equipo) equiposImportados.push(eq);
   });
 
-  if (!equiposImportados.length) throw new Error('No se identificaron equipos válidos en el archivo (revise los nombres de columnas).');
+  if (!equiposImportados.length) {
+    throw new Error(`Se identificó la fila de encabezados (fila ${headerRowIdx+1}) pero no se encontraron equipos válidos en las filas siguientes. ` +
+      `Columnas reconocidas: ${reconocidasOk.join(', ') || '(ninguna)'}.`);
+  }
+
+  // Reasignar IDs secuenciales para evitar duplicados desde el archivo
+  equiposImportados.forEach((eq, i) => eq.id = i + 1);
 
   estado = { equipos: equiposImportados, registros: [], pendientes: [] };
   guardarEstado();
   renderTodo();
 
+  const ignoradas = reconocidas.filter(Boolean).slice(0, 8);
   return `<strong>Importación XLSX exitosa.</strong><br>
-    Equipos importados: ${equiposImportados.length}<br>
-    <em style="font-size:11px;">Nota: los registros de ejecución y pendientes se reiniciaron. Mapeo por nombre de columna; si alguna columna no se reconoció, revise el encabezado.</em>`;
+    Equipos importados: <strong>${equiposImportados.length}</strong> · Fila de encabezados detectada: ${headerRowIdx+1}.<br>
+    ${ignoradas.length ? `<em style="font-size:11px;">Columnas no mapeadas e ignoradas: ${ignoradas.join(', ')}${reconocidas.length>8?'…':''}</em><br>` : ''}
+    <em style="font-size:11px;">Nota: los registros de ejecución y pendientes se reiniciaron.</em>`;
 }
 
 /* Lee sharedStrings.xml → array de strings */
