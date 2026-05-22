@@ -515,6 +515,419 @@ input, select, textarea { font-family: inherit; font-size: inherit; color: inher
   color: var(--gris-500);
 }
 .empty-state .icon { font-size: 36px; margin-bottom: 8px; opacity: .4; }
+
+/* ============================================================
+   FILTROS TIPO EXCEL EN ENCABEZADOS DE COLUMNA
+   ============================================================ */
+.th-flex {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 6px;
+}
+.th-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.btn-filtro {
+  display: inline-grid; place-items: center;
+  width: 18px; height: 18px;
+  border-radius: 3px;
+  font-size: 11px; line-height: 1;
+  color: var(--gris-500);
+  background: transparent;
+  transition: all .15s ease;
+  flex-shrink: 0;
+}
+.btn-filtro:hover { background: var(--gris-200); color: var(--gris-900); }
+.btn-filtro.activo {
+  color: #fff;
+  background: var(--azul-primario);
+}
+
+.filtro-popup {
+  position: absolute;
+  z-index: 80;
+  background: #fff;
+  border: 1px solid var(--gris-300);
+  border-radius: 6px;
+  box-shadow: var(--sombra-lg);
+  width: 240px;
+  display: none;
+  flex-direction: column;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.filtro-popup.activo { display: flex; }
+.filtro-popup .fp-buscar {
+  padding: 8px;
+  border-bottom: 1px solid var(--gris-200);
+}
+.filtro-popup .fp-buscar input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--gris-300);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.filtro-popup .fp-acciones {
+  display: flex; gap: 6px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--gris-200);
+  background: var(--gris-50);
+}
+.filtro-popup .fp-link {
+  font-size: 11px;
+  color: var(--azul-primario);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.filtro-popup .fp-link:hover { background: var(--azul-suave); }
+.filtro-popup .fp-lista {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px;
+  font-weight: 400;
+  color: var(--gris-900);
+}
+.filtro-popup .fp-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.filtro-popup .fp-item:hover { background: var(--gris-100); }
+.filtro-popup .fp-item input { margin: 0; }
+.filtro-popup .fp-item .vacio { color: var(--gris-400); font-style: italic; }
+.filtro-popup .fp-footer {
+  display: flex; justify-content: flex-end; gap: 6px;
+  padding: 8px;
+  border-top: 1px solid var(--gris-200);
+  background: var(--gris-50);
+}
+.filtro-popup .fp-footer .btn {
+  padding: 5px 10px; font-size: 11px;
+}
+
+/* ============================================================
+   BADGES ESTADO DEL EQUIPO
+   ============================================================ */
+.badge-estado {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .4px;
+  white-space: nowrap;
+}
+.estado-Operativo      { background: var(--verde-bg);    color: var(--verde); }
+.estado-No-operativo   { background: var(--rojo-bg);     color: var(--rojo); }
+.estado-Servicio-tecnico { background: var(--amarillo-bg); color: var(--amarillo); }
+
+.select-estado {
+  padding: 3px 6px;
+  border: 1px solid var(--gris-300);
+  border-radius: 4px;
+  font-size: 11px;
+  background: #fff;
+  cursor: pointer;
+}
+.select-estado:focus {
+  outline: none;
+  border-color: var(--azul-primario);
+  box-shadow: 0 0 0 2px rgba(29,78,216,.15);
+}
+
+/* ============================================================
+   EDITOR INLINE DE PROGRAMACIÓN (HISTORIAL)
+   ============================================================ */
+.historial-meses .celda-prog {
+  cursor: pointer;
+  transition: outline .15s ease;
+}
+.historial-meses .celda-prog:hover {
+  outline: 2px dashed var(--azul-primario);
+  outline-offset: -2px;
+}
+.prog-popup {
+  position: absolute;
+  z-index: 80;
+  background: #fff;
+  border: 1px solid var(--gris-300);
+  border-radius: 6px;
+  box-shadow: var(--sombra-lg);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+}
+.prog-popup.activo { display: flex; }
+.prog-popup button {
+  padding: 6px 12px;
+  font-size: 12px; font-weight: 600;
+  border-radius: 4px;
+  text-align: center;
+  min-width: 100px;
+  transition: filter .15s ease;
+}
+.prog-popup button:hover { filter: brightness(.92); }
+
+/* ============================================================
+   VISTA PENDIENTES
+   ============================================================ */
+.pendientes-toolbar {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.pendientes-toolbar .grupo {
+  display: flex; align-items: center; gap: 6px;
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.pendientes-toolbar label {
+  font-size: 11px; font-weight: 600;
+  color: var(--gris-700);
+}
+.pendientes-toolbar select {
+  border: none;
+  font-size: 12px;
+  background: transparent;
+  padding: 2px 4px;
+}
+
+.pendientes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 12px;
+}
+
+.pendiente-card {
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: var(--sombra-sm);
+  display: flex; flex-direction: column;
+  transition: box-shadow .15s ease, transform .15s ease;
+  cursor: pointer;
+  position: relative;
+}
+.pendiente-card:hover {
+  box-shadow: var(--sombra-md);
+}
+.pendiente-card .borde-prioridad {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 8px 0 0 8px;
+}
+.pendiente-card.prio-alta .borde-prioridad    { background: var(--rojo); }
+.pendiente-card.prio-media .borde-prioridad   { background: var(--amarillo); }
+.pendiente-card.prio-baja .borde-prioridad    { background: var(--gris-400); }
+
+.pendiente-card .pc-header {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  margin-bottom: 6px;
+  margin-left: 6px;
+}
+.pendiente-card .pc-titulo {
+  font-size: 14px; font-weight: 600;
+  color: var(--gris-900);
+  flex: 1;
+}
+.pendiente-card .pc-estado {
+  font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+  text-transform: uppercase; letter-spacing: .4px;
+  white-space: nowrap;
+}
+.pc-estado.estado-abierto    { background: var(--azul-suave);   color: var(--azul-oscuro); }
+.pc-estado.estado-en-curso   { background: var(--amarillo-bg);  color: var(--amarillo); }
+.pc-estado.estado-cerrado    { background: var(--verde-bg);     color: var(--verde); }
+.pc-estado.estado-vencido    { background: var(--rojo-bg);      color: var(--rojo); }
+
+.pendiente-card .pc-equipo {
+  font-size: 11px;
+  color: var(--gris-500);
+  margin-bottom: 8px;
+  margin-left: 6px;
+}
+.pendiente-card .pc-descripcion {
+  font-size: 12px;
+  color: var(--gris-700);
+  margin-bottom: 10px;
+  margin-left: 6px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pendiente-card .pc-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px;
+  color: var(--gris-500);
+  margin-left: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--gris-200);
+}
+.pendiente-card .pc-footer .fecha-vencida { color: var(--rojo); font-weight: 600; }
+.pendiente-card .pc-footer .progreso {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.pendiente-card .progreso-barra {
+  width: 60px; height: 6px;
+  background: var(--gris-200);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pendiente-card .progreso-barra > div {
+  height: 100%;
+  background: var(--verde);
+  transition: width .2s ease;
+}
+
+/* Detalle del pendiente */
+.pendiente-detalle {
+  background: #fff;
+  border: 1px solid var(--gris-200);
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: var(--sombra-sm);
+}
+.pendiente-detalle .pd-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--azul-primario);
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.pendiente-detalle .pd-back:hover { text-decoration: underline; }
+.pendiente-detalle .pd-titulo-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.pendiente-detalle h2 { font-size: 20px; font-weight: 600; color: var(--gris-900); }
+.pendiente-detalle .pd-subtitulo {
+  color: var(--gris-500); font-size: 13px;
+  margin-bottom: 16px;
+}
+.pendiente-detalle .pd-meta {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 24px;
+  padding: 12px 0; margin-bottom: 16px;
+  border-top: 1px solid var(--gris-200);
+  border-bottom: 1px solid var(--gris-200);
+}
+.pendiente-detalle .pd-meta .dato { display: flex; flex-direction: column; }
+.pendiente-detalle .pd-meta .etiqueta {
+  font-size: 10px; font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.pendiente-detalle .pd-meta .valor { font-size: 13px; color: var(--gris-900); font-weight: 500; }
+
+.pd-descripcion-box {
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--gris-700);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-bottom: 20px;
+}
+
+.pd-seccion {
+  margin-top: 16px;
+}
+.pd-seccion-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.pd-seccion-header h3 {
+  font-size: 14px; font-weight: 600; color: var(--gris-900);
+}
+
+.tareas-lista { display: flex; flex-direction: column; gap: 6px; }
+.tarea-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: 5px;
+  font-size: 13px;
+}
+.tarea-item.completada {
+  background: #fff;
+  color: var(--gris-400);
+  text-decoration: line-through;
+}
+.tarea-item .tarea-texto { flex: 1; }
+.tarea-item .tarea-fecha {
+  font-size: 10px;
+  color: var(--gris-400);
+  white-space: nowrap;
+}
+.tarea-item button.eliminar {
+  font-size: 14px;
+  color: var(--gris-400);
+  width: 22px; height: 22px;
+  border-radius: 3px;
+}
+.tarea-item button.eliminar:hover { background: var(--rojo-bg); color: var(--rojo); }
+
+.actualizacion-item {
+  padding: 10px 12px;
+  background: var(--gris-50);
+  border-left: 3px solid var(--azul-primario);
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 8px;
+}
+.actualizacion-item .au-header {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px;
+  color: var(--gris-500);
+  margin-bottom: 4px;
+}
+.actualizacion-item .au-autor { font-weight: 600; color: var(--gris-700); }
+.actualizacion-item .au-comentario {
+  font-size: 13px;
+  color: var(--gris-900);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Importación */
+.import-zona {
+  border: 2px dashed var(--gris-300);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  background: var(--gris-50);
+  transition: all .15s ease;
+}
+.import-zona.dragover {
+  border-color: var(--azul-primario);
+  background: var(--azul-suave);
+}
+.import-zona p { font-size: 13px; color: var(--gris-700); margin-bottom: 6px; }
+.import-zona .hint { font-size: 11px; color: var(--gris-500); margin-bottom: 10px; }
+.import-zona input[type="file"] { display: none; }
+.import-resumen {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--verde-bg);
+  border: 1px solid var(--verde);
+  border-radius: 5px;
+  font-size: 12px;
+  color: #166534;
+  text-align: left;
+}
+.import-resumen.error {
+  background: var(--rojo-bg);
+  border-color: var(--rojo);
+  color: #991b1b;
+}
 </style>
 </head>
 <body>
@@ -535,8 +948,10 @@ input, select, textarea { font-family: inherit; font-size: inherit; color: inher
       <button class="tab" data-vista="pmp">PMP_2026</button>
       <button class="tab" data-vista="registro">Registro_MP-2026</button>
       <button class="tab activa" data-vista="inventario">Inventario</button>
+      <button class="tab" data-vista="pendientes">Pendientes</button>
     </nav>
     <div class="header-utils">
+      <button class="btn-util" id="btn-importar">Importar archivo</button>
       <button class="btn-util" id="btn-exportar">Exportar JSON</button>
       <button class="btn-util" id="btn-resetear">Resetear datos demo</button>
     </div>
@@ -612,7 +1027,72 @@ input, select, textarea { font-family: inherit; font-size: inherit; color: inher
       <div class="historial-meses" id="historial-meses"></div>
     </section>
 
+    <!-- ===================== VISTA PENDIENTES ===================== -->
+    <section class="vista" id="vista-pendientes">
+      <div class="vista-header">
+        <div class="vista-titulo">
+          <h2>Pendientes</h2>
+          <p>Registro de pendientes operativos con fecha compromiso, tareas y bitácora de actualizaciones.</p>
+        </div>
+        <button class="btn btn-primario" id="btn-nuevo-pendiente">+ Nuevo pendiente</button>
+      </div>
+      <div class="pendientes-toolbar">
+        <div class="grupo">
+          <label>Estado:</label>
+          <select id="filtro-pendiente-estado">
+            <option value="">Todos</option>
+            <option value="abierto">Abierto</option>
+            <option value="en-curso">En curso</option>
+            <option value="cerrado">Cerrado</option>
+          </select>
+        </div>
+        <div class="grupo">
+          <label>Prioridad:</label>
+          <select id="filtro-pendiente-prio">
+            <option value="">Todas</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+        <div class="contador" id="contador-pendientes" style="margin-left:auto;font-size:12px;color:var(--gris-500);"></div>
+      </div>
+      <div id="pendientes-contenedor"></div>
+    </section>
+
+    <!-- ===================== VISTA DETALLE PENDIENTE ===================== -->
+    <section class="vista" id="vista-pendiente-detalle">
+      <div class="pendiente-detalle" id="pendiente-detalle-cont"></div>
+    </section>
+
   </main>
+</div>
+
+<!-- ============================================================
+     POPUP FILTRO COLUMNA (EXCEL-LIKE)
+     ============================================================ -->
+<div class="filtro-popup" id="filtro-popup">
+  <div class="fp-buscar">
+    <input type="text" id="fp-buscar-input" placeholder="Buscar..." autocomplete="off" />
+  </div>
+  <div class="fp-acciones">
+    <button class="fp-link" id="fp-todo">Seleccionar todo</button>
+    <button class="fp-link" id="fp-nada">Deseleccionar todo</button>
+  </div>
+  <div class="fp-lista" id="fp-lista"></div>
+  <div class="fp-footer">
+    <button class="btn btn-secundario" id="fp-cancelar">Cancelar</button>
+    <button class="btn btn-primario" id="fp-aplicar">Aplicar</button>
+  </div>
+</div>
+
+<!-- Popup selector de código de programación -->
+<div class="prog-popup" id="prog-popup">
+  <button data-cod="X"  class="cod-X">X — Programado</button>
+  <button data-cod="R"  class="cod-R">R — Reprogramado</button>
+  <button data-cod="RA" class="cod-RA">RA — Año anterior</button>
+  <button data-cod="PM" class="cod-PM">PM — Puesta en marcha</button>
+  <button data-cod=""   style="background:var(--gris-100);color:var(--gris-700);">Vacío</button>
 </div>
 
 <!-- ============================================================
@@ -700,6 +1180,150 @@ input, select, textarea { font-family: inherit; font-size: inherit; color: inher
   </div>
 </div>
 
+<!-- ============================================================
+     MODAL NUEVO/EDITAR PENDIENTE
+     ============================================================ -->
+<div class="modal-overlay" id="modal-pendiente-overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="modal-pendiente-titulo">Nuevo pendiente</h3>
+      <button class="cerrar" data-cerrar-pendiente aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-error" id="modal-pendiente-error"></div>
+      <div class="campo">
+        <label for="pend-titulo">Título <span class="req">*</span></label>
+        <input type="text" id="pend-titulo" maxlength="120"
+               style="width:100%;padding:8px 10px;border:1px solid var(--gris-300);border-radius:5px;font-size:13px;" />
+      </div>
+      <div class="campo">
+        <label for="pend-equipo">Equipo asociado</label>
+        <select id="pend-equipo">
+          <option value="">— Sin equipo asociado —</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="campo">
+          <label for="pend-prioridad">Prioridad <span class="req">*</span></label>
+          <select id="pend-prioridad">
+            <option value="alta">Alta</option>
+            <option value="media" selected>Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="pend-estado">Estado <span class="req">*</span></label>
+          <select id="pend-estado">
+            <option value="abierto">Abierto</option>
+            <option value="en-curso">En curso</option>
+            <option value="cerrado">Cerrado</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="campo">
+          <label for="pend-responsable">Responsable <span class="req">*</span></label>
+          <select id="pend-responsable">
+            <option value="">— Seleccionar —</option>
+            <option>Carlos Bahamondes Seguel</option>
+            <option>Cristián Beltrán Oviedo</option>
+            <option>Cristina Rozas Urrutia</option>
+            <option>Daniel Díaz Neira</option>
+            <option>Ignacio Berner Bergara</option>
+            <option>Macarena Toledo</option>
+            <option>Marco Ulloa</option>
+            <option>Matías Soazo Garrido</option>
+            <option>Personal externo</option>
+            <option>Ricardo Matus Aroca</option>
+            <option>Tito Millapán Riquelme</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="pend-fecha-comp">Fecha compromiso <span class="req">*</span></label>
+          <input type="date" id="pend-fecha-comp" />
+        </div>
+      </div>
+      <div class="campo">
+        <label for="pend-descripcion">Descripción</label>
+        <textarea id="pend-descripcion" maxlength="1000" placeholder="Detalle del pendiente"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secundario" data-cerrar-pendiente>Cancelar</button>
+      <button class="btn btn-primario" id="btn-guardar-pendiente">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL NUEVA TAREA / ACTUALIZACIÓN
+     ============================================================ -->
+<div class="modal-overlay" id="modal-itempend-overlay">
+  <div class="modal" role="dialog" aria-modal="true" style="width:440px;">
+    <div class="modal-header">
+      <h3 id="modal-itempend-titulo">Agregar</h3>
+      <button class="cerrar" data-cerrar-itempend aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-error" id="modal-itempend-error"></div>
+      <div class="campo" id="campo-itempend-autor" style="display:none;">
+        <label for="itempend-autor">Autor <span class="req">*</span></label>
+        <select id="itempend-autor">
+          <option value="">— Seleccionar —</option>
+          <option>Carlos Bahamondes Seguel</option>
+          <option>Cristián Beltrán Oviedo</option>
+          <option>Cristina Rozas Urrutia</option>
+          <option>Daniel Díaz Neira</option>
+          <option>Ignacio Berner Bergara</option>
+          <option>Macarena Toledo</option>
+          <option>Marco Ulloa</option>
+          <option>Matías Soazo Garrido</option>
+          <option>Personal externo</option>
+          <option>Ricardo Matus Aroca</option>
+          <option>Tito Millapán Riquelme</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="itempend-texto" id="itempend-label">Texto <span class="req">*</span></label>
+        <textarea id="itempend-texto" maxlength="500"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secundario" data-cerrar-itempend>Cancelar</button>
+      <button class="btn btn-primario" id="btn-guardar-itempend">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL IMPORTAR ARCHIVO MAESTRO
+     ============================================================ -->
+<div class="modal-overlay" id="modal-import-overlay">
+  <div class="modal" role="dialog" aria-modal="true" style="width:560px;">
+    <div class="modal-header">
+      <h3>Importar archivo maestro</h3>
+      <button class="cerrar" data-cerrar-import aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--gris-700);margin-bottom:12px;line-height:1.5;">
+        Al importar, los datos actuales (equipos, programaciones, registros y pendientes) serán
+        <strong>reemplazados</strong> por el contenido del archivo. Se recomienda exportar primero
+        un respaldo en JSON.
+      </p>
+      <div class="import-zona" id="import-zona">
+        <p><strong>Arrastrá el archivo aquí</strong> o</p>
+        <p class="hint">Formatos: .json (estado completo) · .xlsx / .xlsm (programación PMP — mejor esfuerzo)</p>
+        <button class="btn btn-primario" id="btn-elegir-archivo">Elegir archivo</button>
+        <input type="file" id="input-archivo" accept=".json,.xlsx,.xlsm" />
+      </div>
+      <div class="import-resumen" id="import-resumen" style="display:none;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secundario" data-cerrar-import>Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-stack" id="toast-stack"></div>
 
 <script>
@@ -713,7 +1337,16 @@ const NOMBRE_MES = {
 };
 const CAUSALES_30D = ['C1','C5','C6','C7','C8'];   // generan R en mes siguiente
 const CAUSALES_LIBRES = ['C2','C3','C4'];          // sin mes destino fijo
-const STORAGE_KEY = 'pmp2026_estado_v1';
+const STORAGE_KEY = 'pmp2026_estado_v2';
+
+const ESTADOS_EQUIPO = ['Operativo', 'No operativo', 'Servicio técnico'];
+const CODIGOS_PROG = ['', 'X', 'R', 'RA', 'PM'];
+
+const EJECUTORES = [
+  'Carlos Bahamondes Seguel','Cristián Beltrán Oviedo','Cristina Rozas Urrutia',
+  'Daniel Díaz Neira','Ignacio Berner Bergara','Macarena Toledo','Marco Ulloa',
+  'Matías Soazo Garrido','Personal externo','Ricardo Matus Aroca','Tito Millapán Riquelme'
+];
 
 /* Columnas de identificación comunes (vistas PMP y Registro) */
 const COLS_IDENT = [
@@ -737,10 +1370,11 @@ const COLS_IDENT = [
   { key:'responsableMP',     label:'Responsable MP' }
 ];
 
-/* Columnas de inventario */
-const COLS_INVENTARIO = COLS_IDENT.filter(c =>
-  !['observacion','frecuenciaMP','responsableMP'].includes(c.key)
-);
+/* Columnas de inventario (incluye Estado del equipo) */
+const COLS_INVENTARIO = [
+  ...COLS_IDENT.filter(c => !['observacion','frecuenciaMP','responsableMP'].includes(c.key)),
+  { key:'estado', label:'Estado equipo' }
+];
 
 /* ============================================================================
    DATOS DEMO
@@ -777,10 +1411,61 @@ function generarDatosDemo() {
       if (c.key !== 'id') obj[c.key] = e[c.key] || '';
     });
     obj.programacion = programacion;
+    // Estado del equipo (operativo por defecto; algunos no operativos / servicio técnico para demo)
+    obj.estado = 'Operativo';
     return obj;
   });
 
-  return { equipos: equiposNorm, registros: [] };
+  // Algunos estados de ejemplo
+  if (equiposNorm[2]) equiposNorm[2].estado = 'Servicio técnico';
+  if (equiposNorm[5]) equiposNorm[5].estado = 'No operativo';
+  if (equiposNorm[15]) equiposNorm[15].estado = 'Servicio técnico';
+
+  const hoy = new Date();
+  const enDias = n => new Date(hoy.getTime() + n*86400000).toISOString().slice(0,10);
+  const haceDias = n => new Date(hoy.getTime() - n*86400000).toISOString();
+
+  // Pendientes demo
+  const pendientes = [
+    {
+      id: 1,
+      titulo: 'Reposición de sensor SpO₂ en monitor cama 02',
+      equipoId: 2,
+      descripcion: 'El sensor de SpO₂ presenta lecturas erráticas durante turno nocturno. Solicitar repuesto al proveedor Philips.',
+      prioridad: 'alta',
+      estado: 'en-curso',
+      responsable: 'Cristián Beltrán Oviedo',
+      fechaCreacion: haceDias(3),
+      fechaCompromiso: enDias(7),
+      fechaCierre: null,
+      tareas: [
+        { id: 1, descripcion: 'Solicitar cotización a Philips', completada: true,  fechaCreacion: haceDias(3) },
+        { id: 2, descripcion: 'Emitir orden de compra',         completada: false, fechaCreacion: haceDias(2) },
+        { id: 3, descripcion: 'Coordinar recambio en UCI',      completada: false, fechaCreacion: haceDias(1) }
+      ],
+      actualizaciones: [
+        { id: 1, fecha: haceDias(2), autor: 'Cristián Beltrán Oviedo', comentario: 'Cotización recibida: $145.000 + IVA. A la espera de aprobación.' }
+      ]
+    },
+    {
+      id: 2,
+      titulo: 'Calibración pendiente máquina de anestesia Quirófano 03',
+      equipoId: 8,
+      descripcion: 'Calibración anual programada pendiente desde marzo por carga de pabellón.',
+      prioridad: 'media',
+      estado: 'abierto',
+      responsable: 'Marco Ulloa',
+      fechaCreacion: haceDias(10),
+      fechaCompromiso: enDias(14),
+      fechaCierre: null,
+      tareas: [
+        { id: 1, descripcion: 'Coordinar ventana con jefa de pabellón', completada: false, fechaCreacion: haceDias(10) }
+      ],
+      actualizaciones: []
+    }
+  ];
+
+  return { equipos: equiposNorm, registros: [], pendientes };
 }
 
 /* ============================================================================
@@ -791,7 +1476,15 @@ let estado = cargarEstado();
 function cargarEstado() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const e = JSON.parse(raw);
+      // Normalizar por si viene de una versión previa
+      if (!Array.isArray(e.pendientes)) e.pendientes = [];
+      (e.equipos || []).forEach(eq => {
+        if (!eq.estado) eq.estado = 'Operativo';
+      });
+      return e;
+    }
   } catch (e) { console.warn('Error leyendo estado, se reinicia.', e); }
   return generarDatosDemo();
 }
@@ -873,6 +1566,151 @@ function toast(msg, tipo = '') {
 }
 
 /* ============================================================================
+   FILTROS TIPO EXCEL POR COLUMNA
+   ----------------------------------------------------------------------------
+   filtrosVista[vista][colKey] = Set<valor>  → solo se muestran filas cuyo valor
+   esté en el Set. Si la clave no existe, no hay filtro. Valor vacío = '(vacío)'.
+   ============================================================================ */
+const filtrosVista = { pmp: {}, registro: {} };
+
+function valorCelda(equipo, colKey) {
+  // Devuelve el valor textual usado para filtrar/listar.
+  // Para meses (ene..dic) -> código en programación.
+  if (MESES.includes(colKey)) return equipo.programacion[colKey] || '';
+  return equipo[colKey] != null ? String(equipo[colKey]) : '';
+}
+
+function aplicarFiltros(vista, equipos) {
+  const f = filtrosVista[vista];
+  if (!f || !Object.keys(f).length) return equipos;
+  return equipos.filter(eq => {
+    for (const col of Object.keys(f)) {
+      const sel = f[col];
+      const v = valorCelda(eq, col);
+      if (!sel.has(v)) return false;
+    }
+    return true;
+  });
+}
+
+function valoresUnicosColumna(vista, colKey) {
+  // Recorre TODOS los equipos (sin aplicar el filtro de esta misma columna)
+  // para listar opciones consistentes.
+  const otrosFiltros = { ...filtrosVista[vista] };
+  delete otrosFiltros[colKey];
+  const set = new Set();
+  estado.equipos.forEach(eq => {
+    let pasa = true;
+    for (const c of Object.keys(otrosFiltros)) {
+      if (!otrosFiltros[c].has(valorCelda(eq, c))) { pasa = false; break; }
+    }
+    if (pasa) set.add(valorCelda(eq, colKey));
+  });
+  return Array.from(set).sort((a,b) => {
+    if (a === '' && b !== '') return 1;
+    if (b === '' && a !== '') return -1;
+    return a.localeCompare(b, 'es', { numeric: true });
+  });
+}
+
+/* Popup de filtro */
+const filtroPopup = document.getElementById('filtro-popup');
+let filtroPopupCtx = null; // { vista, colKey, seleccion: Set, anchor: el }
+
+function abrirFiltroPopup(anchor, vista, colKey, label) {
+  filtroPopupCtx = { vista, colKey, anchor };
+  const valores = valoresUnicosColumna(vista, colKey);
+  const actual = filtrosVista[vista][colKey];
+  // Si no hay filtro: todos seleccionados. Si hay, copia.
+  filtroPopupCtx.seleccion = new Set(actual ? Array.from(actual) : valores);
+
+  // Posicionamiento debajo del header
+  const r = anchor.getBoundingClientRect();
+  filtroPopup.style.top  = (window.scrollY + r.bottom + 4) + 'px';
+  filtroPopup.style.left = Math.max(8, Math.min(window.innerWidth - 250, window.scrollX + r.left)) + 'px';
+
+  document.getElementById('fp-buscar-input').value = '';
+  pintarListaFiltro(valores);
+  filtroPopup.classList.add('activo');
+  setTimeout(() => document.getElementById('fp-buscar-input').focus(), 50);
+}
+
+function pintarListaFiltro(valores) {
+  const buscar = document.getElementById('fp-buscar-input').value.trim().toLowerCase();
+  const filt = buscar ? valores.filter(v => v.toLowerCase().includes(buscar)) : valores;
+  const lista = document.getElementById('fp-lista');
+  if (!filt.length) { lista.innerHTML = '<div style="padding:10px;color:var(--gris-400);">Sin coincidencias</div>'; return; }
+  lista.innerHTML = filt.map(v => {
+    const checked = filtroPopupCtx.seleccion.has(v) ? 'checked' : '';
+    const display = v === '' ? '<span class="vacio">(vacío)</span>' : escapeHtml(v);
+    return `<label class="fp-item"><input type="checkbox" data-val="${escapeHtml(v)}" ${checked}/> ${display}</label>`;
+  }).join('');
+  lista.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const val = cb.dataset.val;
+      if (cb.checked) filtroPopupCtx.seleccion.add(val);
+      else filtroPopupCtx.seleccion.delete(val);
+    });
+  });
+}
+
+function cerrarFiltroPopup() {
+  filtroPopup.classList.remove('activo');
+  filtroPopupCtx = null;
+}
+
+document.getElementById('fp-buscar-input').addEventListener('input', () => {
+  if (!filtroPopupCtx) return;
+  pintarListaFiltro(valoresUnicosColumna(filtroPopupCtx.vista, filtroPopupCtx.colKey));
+});
+document.getElementById('fp-todo').addEventListener('click', () => {
+  if (!filtroPopupCtx) return;
+  const valores = valoresUnicosColumna(filtroPopupCtx.vista, filtroPopupCtx.colKey);
+  filtroPopupCtx.seleccion = new Set(valores);
+  pintarListaFiltro(valores);
+});
+document.getElementById('fp-nada').addEventListener('click', () => {
+  if (!filtroPopupCtx) return;
+  filtroPopupCtx.seleccion = new Set();
+  pintarListaFiltro(valoresUnicosColumna(filtroPopupCtx.vista, filtroPopupCtx.colKey));
+});
+document.getElementById('fp-cancelar').addEventListener('click', cerrarFiltroPopup);
+document.getElementById('fp-aplicar').addEventListener('click', () => {
+  if (!filtroPopupCtx) return;
+  const { vista, colKey, seleccion } = filtroPopupCtx;
+  const valores = valoresUnicosColumna(vista, colKey);
+  // Si todos están seleccionados → quitar filtro
+  if (seleccion.size === valores.length) delete filtrosVista[vista][colKey];
+  else filtrosVista[vista][colKey] = seleccion;
+  cerrarFiltroPopup();
+  if (vista === 'pmp') renderPMP();
+  else renderRegistro();
+});
+document.addEventListener('click', e => {
+  if (!filtroPopup.classList.contains('activo')) return;
+  if (filtroPopup.contains(e.target)) return;
+  if (e.target.closest('.btn-filtro')) return;
+  cerrarFiltroPopup();
+});
+
+function htmlEncabezadoConFiltro(vista, colKey, label, extraClass = '') {
+  const activo = filtrosVista[vista][colKey] ? 'activo' : '';
+  return `<div class="th-flex">
+    <span class="th-label">${escapeHtml(label)}</span>
+    <button class="btn-filtro ${activo}" data-vista="${vista}" data-col="${colKey}" title="Filtrar">▾</button>
+  </div>`;
+}
+
+function bindBotonesFiltro(scope) {
+  scope.querySelectorAll('.btn-filtro').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      abrirFiltroPopup(btn, btn.dataset.vista, btn.dataset.col, btn.title);
+    });
+  });
+}
+
+/* ============================================================================
    NAVEGACIÓN ENTRE VISTAS
    ============================================================================ */
 function mostrarVista(nombre) {
@@ -880,8 +1718,12 @@ function mostrarVista(nombre) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('activa'));
   if (nombre === 'historial') {
     document.getElementById('vista-historial').classList.add('activa');
-    // Mantener tab inventario activa mientras se ve historial
     document.querySelector('.tab[data-vista="inventario"]').classList.add('activa');
+    return;
+  }
+  if (nombre === 'pendiente-detalle') {
+    document.getElementById('vista-pendiente-detalle').classList.add('activa');
+    document.querySelector('.tab[data-vista="pendientes"]').classList.add('activa');
     return;
   }
   document.getElementById('vista-' + nombre).classList.add('activa');
@@ -897,6 +1739,7 @@ document.getElementById('nav-tabs').addEventListener('click', e => {
   if (vista === 'pmp') renderPMP();
   if (vista === 'registro') renderRegistro();
   if (vista === 'inventario') renderInventario();
+  if (vista === 'pendientes') renderPendientes();
 });
 
 /* ============================================================================
@@ -904,18 +1747,20 @@ document.getElementById('nav-tabs').addEventListener('click', e => {
    ============================================================================ */
 function renderPMP() {
   const wrap = document.getElementById('tabla-pmp-wrap');
-  let html = '<table class="tabla"><thead><tr>';
+  const filtrados = aplicarFiltros('pmp', estado.equipos);
 
+  let html = '<table class="tabla"><thead><tr>';
   COLS_IDENT.forEach((c, i) => {
     const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
-    html += `<th class="${fija}">${escapeHtml(c.label)}</th>`;
+    html += `<th class="${fija}">${htmlEncabezadoConFiltro('pmp', c.key, c.label)}</th>`;
   });
   MESES.forEach(m => {
-    html += `<th class="col-mes">${m.charAt(0).toUpperCase() + m.slice(1)}</th>`;
+    const label = m.charAt(0).toUpperCase() + m.slice(1);
+    html += `<th class="col-mes">${htmlEncabezadoConFiltro('pmp', m, label)}</th>`;
   });
   html += '</tr></thead><tbody>';
 
-  estado.equipos.forEach(eq => {
+  filtrados.forEach(eq => {
     html += '<tr>';
     COLS_IDENT.forEach((c, i) => {
       const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
@@ -927,36 +1772,83 @@ function renderPMP() {
     });
     html += '</tr>';
   });
+  if (!filtrados.length) {
+    html += `<tr><td colspan="${COLS_IDENT.length + 12}" style="padding:30px;text-align:center;color:var(--gris-500);">Sin equipos para los filtros aplicados.</td></tr>`;
+  }
   html += '</tbody></table>';
   wrap.innerHTML = html;
+  bindBotonesFiltro(wrap);
 }
 
 /* ============================================================================
    RENDER — VISTA REGISTRO_MP-2026
    ============================================================================ */
+/* Para el registro generamos columnas "virtuales" mes-P y mes-R para filtrar
+   independientemente programación y resultado. */
+function valorCeldaRegistro(eq, colKey) {
+  if (colKey.endsWith('-P')) return eq.programacion[colKey.slice(0,3)] || '';
+  if (colKey.endsWith('-R')) {
+    const reg = ultimoRegistro(eq.id, colKey.slice(0,3));
+    return reg ? reg.resultado : '';
+  }
+  return valorCelda(eq, colKey);
+}
+
+function valoresUnicosRegistro(colKey) {
+  const otros = { ...filtrosVista.registro };
+  delete otros[colKey];
+  const set = new Set();
+  estado.equipos.forEach(eq => {
+    let pasa = true;
+    for (const c of Object.keys(otros)) {
+      if (!otros[c].has(valorCeldaRegistro(eq, c))) { pasa = false; break; }
+    }
+    if (pasa) set.add(valorCeldaRegistro(eq, colKey));
+  });
+  return Array.from(set).sort((a,b) => {
+    if (a === '' && b !== '') return 1;
+    if (b === '' && a !== '') return -1;
+    return a.localeCompare(b, 'es', { numeric: true });
+  });
+}
+
+function aplicarFiltrosRegistro(equipos) {
+  const f = filtrosVista.registro;
+  if (!Object.keys(f).length) return equipos;
+  return equipos.filter(eq => {
+    for (const col of Object.keys(f)) {
+      if (!f[col].has(valorCeldaRegistro(eq, col))) return false;
+    }
+    return true;
+  });
+}
+
 function renderRegistro() {
   const wrap = document.getElementById('tabla-registro-wrap');
+  const filtrados = aplicarFiltrosRegistro(estado.equipos);
+
   let html = '<table class="tabla"><thead>';
 
-  // Fila 1: identificación + meses (colspan 2)
+  // Fila 1: identificación (con filtro) + meses (colspan 2)
   html += '<tr class="grupo-mes">';
   COLS_IDENT.forEach((c, i) => {
     const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
-    html += `<th class="${fija}" rowspan="2">${escapeHtml(c.label)}</th>`;
+    html += `<th class="${fija}" rowspan="2">${htmlEncabezadoConFiltro('registro', c.key, c.label)}</th>`;
   });
   MESES.forEach(m => {
     html += `<th class="col-mes col-mes-doble" colspan="2">${m.charAt(0).toUpperCase() + m.slice(1)}</th>`;
   });
   html += '</tr>';
 
-  // Fila 2: subheaders P / R
+  // Fila 2: subheaders P / R con filtro independiente
   html += '<tr class="sub-header">';
-  MESES.forEach(() => {
-    html += `<th class="col-mes">P</th><th class="col-mes">R</th>`;
+  MESES.forEach(m => {
+    html += `<th class="col-mes">${htmlEncabezadoConFiltro('registro', m + '-P', 'P')}</th>`;
+    html += `<th class="col-mes">${htmlEncabezadoConFiltro('registro', m + '-R', 'R')}</th>`;
   });
   html += '</tr></thead><tbody>';
 
-  estado.equipos.forEach(eq => {
+  filtrados.forEach(eq => {
     html += '<tr>';
     COLS_IDENT.forEach((c, i) => {
       const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
@@ -971,9 +1863,22 @@ function renderRegistro() {
     });
     html += '</tr>';
   });
+  if (!filtrados.length) {
+    html += `<tr><td colspan="${COLS_IDENT.length + 24}" style="padding:30px;text-align:center;color:var(--gris-500);">Sin equipos para los filtros aplicados.</td></tr>`;
+  }
   html += '</tbody></table>';
   wrap.innerHTML = html;
+  bindBotonesFiltro(wrap);
 }
+
+/* Engancho los filtros virtuales de registro al sistema global */
+const _valoresUnicosColumnaOrig = valoresUnicosColumna;
+valoresUnicosColumna = function(vista, colKey) {
+  if (vista === 'registro' && (colKey.endsWith('-P') || colKey.endsWith('-R'))) {
+    return valoresUnicosRegistro(colKey);
+  }
+  return _valoresUnicosColumnaOrig(vista, colKey);
+};
 
 /* ============================================================================
    RENDER — VISTA INVENTARIO
@@ -1008,16 +1913,42 @@ function renderInventario() {
     html += `<tr class="clickable" data-equipo="${eq.id}">`;
     COLS_INVENTARIO.forEach((c, i) => {
       const fija = i === 0 ? 'col-fija col-fija-1' : (i === 1 ? 'col-fija col-fija-2' : '');
-      html += `<td class="${fija}">${escapeHtml(eq[c.key])}</td>`;
+      if (c.key === 'estado') {
+        // Selector inline (no propaga el click a la fila para evitar abrir historial)
+        const sel = ESTADOS_EQUIPO.map(es =>
+          `<option value="${es}" ${eq.estado === es ? 'selected' : ''}>${es}</option>`
+        ).join('');
+        html += `<td class="${fija}" data-no-click="1">
+          <select class="select-estado" data-equipo="${eq.id}">${sel}</select>
+        </td>`;
+      } else {
+        html += `<td class="${fija}">${escapeHtml(eq[c.key])}</td>`;
+      }
     });
     html += '</tr>';
   });
   html += '</tbody></table>';
   wrap.innerHTML = html;
 
-  // Bind click en filas
+  // Bind click en filas (excepto sobre selects/elementos data-no-click)
   wrap.querySelectorAll('tr.clickable').forEach(tr => {
-    tr.addEventListener('click', () => abrirHistorial(parseInt(tr.dataset.equipo, 10)));
+    tr.addEventListener('click', e => {
+      if (e.target.closest('[data-no-click]')) return;
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
+      abrirHistorial(parseInt(tr.dataset.equipo, 10));
+    });
+  });
+  // Selectores de estado
+  wrap.querySelectorAll('.select-estado').forEach(sel => {
+    sel.addEventListener('change', e => {
+      const id = parseInt(sel.dataset.equipo, 10);
+      const eq = estado.equipos.find(x => x.id === id);
+      if (!eq) return;
+      eq.estado = sel.value;
+      guardarEstado();
+      toast(`Estado actualizado: ${eq.nInventario} → ${eq.estado}`, 'exito');
+    });
+    sel.addEventListener('click', e => e.stopPropagation());
   });
 }
 
@@ -1045,10 +1976,21 @@ function renderHistorial() {
   if (!eq) return;
 
   const cab = document.getElementById('historial-cabecera');
+  const estadoCls = 'estado-' + eq.estado.replace(/ /g,'-').replace(/é/g,'e');
   cab.innerHTML = `
     <a class="historial-back" id="link-volver">&larr; Volver al inventario</a>
-    <h2>${escapeHtml(eq.equipo)}</h2>
-    <div class="subtitulo">Historial de mantenciones 2026</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+      <div>
+        <h2>${escapeHtml(eq.equipo)}</h2>
+        <div class="subtitulo">Historial de mantenciones 2026</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px;font-weight:600;margin-bottom:4px;">Estado actual</div>
+        <select class="select-estado" id="hist-estado" style="font-size:13px;padding:5px 8px;">
+          ${ESTADOS_EQUIPO.map(es => `<option ${eq.estado === es ? 'selected' : ''}>${es}</option>`).join('')}
+        </select>
+      </div>
+    </div>
     <div class="historial-info">
       <div class="dato"><span class="etiqueta">N° Inventario</span><span class="valor">${escapeHtml(eq.nInventario)}</span></div>
       <div class="dato"><span class="etiqueta">Marca</span><span class="valor">${escapeHtml(eq.marca)}</span></div>
@@ -1065,6 +2007,12 @@ function renderHistorial() {
     mostrarVista('inventario');
     renderInventario();
   });
+  document.getElementById('hist-estado').addEventListener('change', e => {
+    eq.estado = e.target.value;
+    guardarEstado();
+    renderInventario();
+    toast(`Estado actualizado: ${eq.estado}`, 'exito');
+  });
 
   const meses = document.getElementById('historial-meses');
   let html = '<table><thead><tr><th class="etiqueta-fila">&nbsp;</th>';
@@ -1073,11 +2021,11 @@ function renderHistorial() {
   });
   html += '</tr></thead><tbody>';
 
-  // Fila Programación
+  // Fila Programación (editable: click abre popup de códigos)
   html += '<tr><td class="etiqueta-fila">Programación</td>';
   MESES.forEach(m => {
     const cod = eq.programacion[m] || '';
-    html += `<td class="celda-prog ${clasePorCodigo(cod)}">${escapeHtml(cod) || '<span class="placeholder">—</span>'}</td>`;
+    html += `<td class="celda-prog ${clasePorCodigo(cod)}" data-mes="${m}" title="Editar programación">${escapeHtml(cod) || '<span class="placeholder">—</span>'}</td>`;
   });
   html += '</tr>';
 
@@ -1096,7 +2044,48 @@ function renderHistorial() {
   meses.querySelectorAll('.celda-res').forEach(td => {
     td.addEventListener('click', () => abrirModal(eq.id, td.dataset.mes));
   });
+  meses.querySelectorAll('.celda-prog').forEach(td => {
+    td.addEventListener('click', e => {
+      e.stopPropagation();
+      abrirProgPopup(td, eq.id, td.dataset.mes);
+    });
+  });
 }
+
+/* ============================================================================
+   EDITOR INLINE DE PROGRAMACIÓN
+   ============================================================================ */
+const progPopup = document.getElementById('prog-popup');
+let progPopupCtx = null;
+
+function abrirProgPopup(anchor, equipoId, mes) {
+  progPopupCtx = { equipoId, mes };
+  const r = anchor.getBoundingClientRect();
+  progPopup.style.top  = (window.scrollY + r.bottom + 4) + 'px';
+  progPopup.style.left = (window.scrollX + r.left) + 'px';
+  progPopup.classList.add('activo');
+}
+function cerrarProgPopup() { progPopup.classList.remove('activo'); progPopupCtx = null; }
+progPopup.querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!progPopupCtx) return;
+    const { equipoId, mes } = progPopupCtx;
+    const eq = estado.equipos.find(x => x.id === equipoId);
+    if (!eq) return;
+    eq.programacion[mes] = b.dataset.cod || '';
+    guardarEstado();
+    cerrarProgPopup();
+    renderTodo();
+    toast(`Programación ${NOMBRE_MES[mes]}: ${eq.programacion[mes] || 'vacío'}`, 'exito');
+  });
+});
+document.addEventListener('click', e => {
+  if (!progPopup.classList.contains('activo')) return;
+  if (progPopup.contains(e.target)) return;
+  if (e.target.closest('.celda-prog')) return;
+  cerrarProgPopup();
+});
 
 /* ============================================================================
    MODAL — REGISTRO DE RESULTADO
@@ -1257,6 +2246,605 @@ function aplicarReglasNegocio(equipoId, mes, resultado) {
 }
 
 /* ============================================================================
+   PENDIENTES — LISTADO Y DETALLE
+   ============================================================================ */
+let pendienteDetalleId = null;
+
+function calcularEstadoEfectivo(p) {
+  // Marca "vencido" si está abierto/en-curso y fechaCompromiso pasó
+  if (p.estado === 'cerrado') return 'cerrado';
+  if (p.fechaCompromiso && p.fechaCompromiso < new Date().toISOString().slice(0,10)) {
+    return 'vencido';
+  }
+  return p.estado;
+}
+
+function renderPendientes() {
+  const cont = document.getElementById('pendientes-contenedor');
+  const fEstado = document.getElementById('filtro-pendiente-estado').value;
+  const fPrio   = document.getElementById('filtro-pendiente-prio').value;
+
+  let lista = estado.pendientes.slice();
+  if (fEstado) lista = lista.filter(p => p.estado === fEstado);
+  if (fPrio)   lista = lista.filter(p => p.prioridad === fPrio);
+  // Orden: abiertos por compromiso ascendente, cerrados al final
+  lista.sort((a,b) => {
+    if (a.estado === 'cerrado' && b.estado !== 'cerrado') return 1;
+    if (b.estado === 'cerrado' && a.estado !== 'cerrado') return -1;
+    return (a.fechaCompromiso || '').localeCompare(b.fechaCompromiso || '');
+  });
+
+  document.getElementById('contador-pendientes').innerHTML =
+    `Mostrando <strong>${lista.length}</strong> de <strong>${estado.pendientes.length}</strong> pendientes`;
+
+  if (!lista.length) {
+    cont.innerHTML = '<div class="empty-state"><div class="icon">✓</div>Sin pendientes registrados.</div>';
+    return;
+  }
+
+  cont.className = 'pendientes-grid';
+  cont.innerHTML = lista.map(p => {
+    const eq = p.equipoId ? estado.equipos.find(e => e.id === p.equipoId) : null;
+    const efectivo = calcularEstadoEfectivo(p);
+    const totalT = p.tareas.length;
+    const hechas = p.tareas.filter(t => t.completada).length;
+    const pct = totalT ? Math.round(hechas/totalT*100) : 0;
+    const vencida = efectivo === 'vencido';
+    return `
+      <div class="pendiente-card prio-${p.prioridad}" data-pendiente="${p.id}">
+        <div class="borde-prioridad"></div>
+        <div class="pc-header">
+          <div class="pc-titulo">${escapeHtml(p.titulo)}</div>
+          <div class="pc-estado estado-${efectivo}">${efectivo.replace('-',' ')}</div>
+        </div>
+        <div class="pc-equipo">${eq ? escapeHtml(eq.nInventario + ' · ' + eq.equipo) : 'Sin equipo asociado'}</div>
+        <div class="pc-descripcion">${escapeHtml(p.descripcion || '—')}</div>
+        <div class="pc-footer">
+          <span>Resp.: ${escapeHtml(p.responsable)}</span>
+          <span class="${vencida ? 'fecha-vencida' : ''}">Compromiso: ${escapeHtml(formatearFecha(p.fechaCompromiso))}</span>
+        </div>
+        <div class="pc-footer" style="border-top:none;padding-top:6px;">
+          <span class="progreso">
+            <span>${hechas}/${totalT} tareas</span>
+            <span class="progreso-barra"><div style="width:${pct}%"></div></span>
+          </span>
+          <span>${p.actualizaciones.length} actualizaciones</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  cont.querySelectorAll('.pendiente-card').forEach(card => {
+    card.addEventListener('click', () => abrirDetallePendiente(parseInt(card.dataset.pendiente, 10)));
+  });
+}
+
+document.getElementById('filtro-pendiente-estado').addEventListener('change', renderPendientes);
+document.getElementById('filtro-pendiente-prio').addEventListener('change', renderPendientes);
+
+function formatearFecha(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('es-CL', { day:'2-digit', month:'short', year:'numeric' });
+}
+function formatearFechaHora(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleString('es-CL', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function abrirDetallePendiente(id) {
+  pendienteDetalleId = id;
+  mostrarVista('pendiente-detalle');
+  document.querySelector('.tab[data-vista="pendientes"]').classList.add('activa');
+  renderDetallePendiente();
+}
+
+function renderDetallePendiente() {
+  const p = estado.pendientes.find(x => x.id === pendienteDetalleId);
+  if (!p) return;
+  const eq = p.equipoId ? estado.equipos.find(e => e.id === p.equipoId) : null;
+  const efectivo = calcularEstadoEfectivo(p);
+  const cont = document.getElementById('pendiente-detalle-cont');
+
+  cont.innerHTML = `
+    <a class="pd-back" id="link-volver-pend">&larr; Volver a pendientes</a>
+    <div class="pd-titulo-row">
+      <h2>${escapeHtml(p.titulo)}</h2>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="pc-estado estado-${efectivo}" style="padding:4px 10px;">${efectivo.replace('-',' ')}</span>
+        <button class="btn btn-secundario" id="btn-editar-pend">Editar</button>
+        <button class="btn btn-danger"     id="btn-eliminar-pend">Eliminar</button>
+      </div>
+    </div>
+    <div class="pd-subtitulo">Prioridad: <strong>${p.prioridad}</strong> · Responsable: <strong>${escapeHtml(p.responsable)}</strong></div>
+
+    <div class="pd-meta">
+      <div class="dato"><span class="etiqueta">Equipo</span><span class="valor">${eq ? escapeHtml(eq.nInventario + ' · ' + eq.equipo) : '—'}</span></div>
+      <div class="dato"><span class="etiqueta">Fecha creación</span><span class="valor">${formatearFecha(p.fechaCreacion)}</span></div>
+      <div class="dato"><span class="etiqueta">Fecha compromiso</span><span class="valor" ${efectivo==='vencido' ? 'style="color:var(--rojo);font-weight:600;"' : ''}>${formatearFecha(p.fechaCompromiso)}</span></div>
+      <div class="dato"><span class="etiqueta">Tareas</span><span class="valor">${p.tareas.filter(t=>t.completada).length}/${p.tareas.length} completadas</span></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:600;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Descripción</div>
+    <div class="pd-descripcion-box">${escapeHtml(p.descripcion || '(sin descripción)')}</div>
+
+    <div class="pd-seccion">
+      <div class="pd-seccion-header">
+        <h3>Tareas (${p.tareas.length})</h3>
+        <button class="btn btn-secundario" id="btn-add-tarea">+ Agregar tarea</button>
+      </div>
+      <div class="tareas-lista" id="lista-tareas">
+        ${p.tareas.length ? p.tareas.map(t => `
+          <div class="tarea-item ${t.completada ? 'completada' : ''}">
+            <input type="checkbox" data-tarea="${t.id}" ${t.completada ? 'checked' : ''} />
+            <span class="tarea-texto">${escapeHtml(t.descripcion)}</span>
+            <span class="tarea-fecha">${formatearFecha(t.fechaCreacion)}</span>
+            <button class="eliminar" data-eliminar-tarea="${t.id}" title="Eliminar tarea">&times;</button>
+          </div>
+        `).join('') : '<div style="color:var(--gris-400);font-size:12px;padding:10px;">Sin tareas registradas.</div>'}
+      </div>
+    </div>
+
+    <div class="pd-seccion">
+      <div class="pd-seccion-header">
+        <h3>Actualizaciones (${p.actualizaciones.length})</h3>
+        <button class="btn btn-secundario" id="btn-add-actu">+ Nueva actualización</button>
+      </div>
+      <div id="lista-actu">
+        ${p.actualizaciones.length ? p.actualizaciones.slice().reverse().map(a => `
+          <div class="actualizacion-item">
+            <div class="au-header"><span class="au-autor">${escapeHtml(a.autor)}</span><span>${formatearFechaHora(a.fecha)}</span></div>
+            <div class="au-comentario">${escapeHtml(a.comentario)}</div>
+          </div>
+        `).join('') : '<div style="color:var(--gris-400);font-size:12px;padding:10px;">Sin actualizaciones registradas.</div>'}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('link-volver-pend').addEventListener('click', e => {
+    e.preventDefault();
+    mostrarVista('pendientes');
+    renderPendientes();
+  });
+  document.getElementById('btn-editar-pend').addEventListener('click', () => abrirModalPendiente(p.id));
+  document.getElementById('btn-eliminar-pend').addEventListener('click', () => {
+    if (!confirm(`¿Eliminar el pendiente "${p.titulo}"? Esta acción no se puede deshacer.`)) return;
+    estado.pendientes = estado.pendientes.filter(x => x.id !== p.id);
+    guardarEstado();
+    mostrarVista('pendientes');
+    renderPendientes();
+    toast('Pendiente eliminado', 'exito');
+  });
+  document.getElementById('btn-add-tarea').addEventListener('click', () => abrirModalItemPend('tarea'));
+  document.getElementById('btn-add-actu').addEventListener('click',  () => abrirModalItemPend('actualizacion'));
+
+  document.querySelectorAll('input[type="checkbox"][data-tarea]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const tid = parseInt(cb.dataset.tarea, 10);
+      const t = p.tareas.find(x => x.id === tid);
+      if (!t) return;
+      t.completada = cb.checked;
+      guardarEstado();
+      renderDetallePendiente();
+    });
+  });
+  document.querySelectorAll('button[data-eliminar-tarea]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tid = parseInt(btn.dataset.eliminarTarea, 10);
+      if (!confirm('¿Eliminar esta tarea?')) return;
+      p.tareas = p.tareas.filter(t => t.id !== tid);
+      guardarEstado();
+      renderDetallePendiente();
+    });
+  });
+}
+
+/* ============================================================================
+   MODAL — NUEVO / EDITAR PENDIENTE
+   ============================================================================ */
+const modalPend = document.getElementById('modal-pendiente-overlay');
+let modalPendId = null; // null = nuevo
+
+function abrirModalPendiente(id = null) {
+  modalPendId = id;
+  const p = id ? estado.pendientes.find(x => x.id === id) : null;
+  document.getElementById('modal-pendiente-titulo').textContent = p ? 'Editar pendiente' : 'Nuevo pendiente';
+
+  // Cargar select de equipos
+  const selEq = document.getElementById('pend-equipo');
+  selEq.innerHTML = '<option value="">— Sin equipo asociado —</option>' +
+    estado.equipos.map(e => `<option value="${e.id}">${escapeHtml(e.nInventario + ' · ' + e.equipo)}</option>`).join('');
+
+  document.getElementById('pend-titulo').value      = p?.titulo || '';
+  selEq.value                                       = p?.equipoId || '';
+  document.getElementById('pend-prioridad').value   = p?.prioridad || 'media';
+  document.getElementById('pend-estado').value      = p?.estado || 'abierto';
+  document.getElementById('pend-responsable').value = p?.responsable || '';
+  document.getElementById('pend-fecha-comp').value  = p?.fechaCompromiso || '';
+  document.getElementById('pend-descripcion').value = p?.descripcion || '';
+  document.getElementById('modal-pendiente-error').classList.remove('activo');
+
+  modalPend.classList.add('activo');
+  setTimeout(() => document.getElementById('pend-titulo').focus(), 80);
+}
+
+function cerrarModalPendiente() { modalPend.classList.remove('activo'); modalPendId = null; }
+
+document.querySelectorAll('[data-cerrar-pendiente]').forEach(b => b.addEventListener('click', cerrarModalPendiente));
+modalPend.addEventListener('click', e => { if (e.target === modalPend) cerrarModalPendiente(); });
+document.getElementById('btn-nuevo-pendiente').addEventListener('click', () => abrirModalPendiente(null));
+
+document.getElementById('btn-guardar-pendiente').addEventListener('click', () => {
+  const err = document.getElementById('modal-pendiente-error');
+  const titulo = document.getElementById('pend-titulo').value.trim();
+  const equipoIdRaw = document.getElementById('pend-equipo').value;
+  const prioridad = document.getElementById('pend-prioridad').value;
+  const estadoVal = document.getElementById('pend-estado').value;
+  const responsable = document.getElementById('pend-responsable').value;
+  const fechaCompromiso = document.getElementById('pend-fecha-comp').value;
+  const descripcion = document.getElementById('pend-descripcion').value.trim();
+
+  function showErr(m) { err.textContent = m; err.classList.add('activo'); }
+  err.classList.remove('activo');
+  if (!titulo)         return showErr('El título es obligatorio.');
+  if (!responsable)    return showErr('Debe seleccionar un responsable.');
+  if (!fechaCompromiso) return showErr('Debe ingresar la fecha de compromiso.');
+
+  if (modalPendId) {
+    const p = estado.pendientes.find(x => x.id === modalPendId);
+    Object.assign(p, {
+      titulo, equipoId: equipoIdRaw ? parseInt(equipoIdRaw, 10) : null,
+      prioridad, estado: estadoVal, responsable, fechaCompromiso, descripcion,
+      fechaCierre: estadoVal === 'cerrado' && !p.fechaCierre ? new Date().toISOString() : (estadoVal !== 'cerrado' ? null : p.fechaCierre)
+    });
+  } else {
+    const nextId = estado.pendientes.reduce((m,p) => Math.max(m, p.id), 0) + 1;
+    estado.pendientes.push({
+      id: nextId,
+      titulo,
+      equipoId: equipoIdRaw ? parseInt(equipoIdRaw, 10) : null,
+      descripcion,
+      prioridad, estado: estadoVal, responsable,
+      fechaCreacion: new Date().toISOString(),
+      fechaCompromiso,
+      fechaCierre: estadoVal === 'cerrado' ? new Date().toISOString() : null,
+      tareas: [],
+      actualizaciones: []
+    });
+    pendienteDetalleId = nextId;
+  }
+  guardarEstado();
+  cerrarModalPendiente();
+  if (pendienteDetalleId && document.getElementById('vista-pendiente-detalle').classList.contains('activa')) {
+    renderDetallePendiente();
+  } else {
+    renderPendientes();
+  }
+  toast(modalPendId ? 'Pendiente actualizado' : 'Pendiente creado', 'exito');
+});
+
+/* ============================================================================
+   MODAL — NUEVA TAREA / ACTUALIZACIÓN
+   ============================================================================ */
+const modalItem = document.getElementById('modal-itempend-overlay');
+let modalItemTipo = null; // 'tarea' | 'actualizacion'
+
+function abrirModalItemPend(tipo) {
+  modalItemTipo = tipo;
+  document.getElementById('modal-itempend-titulo').textContent =
+    tipo === 'tarea' ? 'Nueva tarea' : 'Nueva actualización';
+  document.getElementById('itempend-label').innerHTML =
+    (tipo === 'tarea' ? 'Descripción de la tarea' : 'Comentario') + ' <span class="req">*</span>';
+  document.getElementById('itempend-texto').value = '';
+  document.getElementById('campo-itempend-autor').style.display = tipo === 'actualizacion' ? 'block' : 'none';
+  document.getElementById('itempend-autor').value = '';
+  document.getElementById('modal-itempend-error').classList.remove('activo');
+  modalItem.classList.add('activo');
+  setTimeout(() => document.getElementById('itempend-texto').focus(), 80);
+}
+function cerrarModalItem() { modalItem.classList.remove('activo'); modalItemTipo = null; }
+document.querySelectorAll('[data-cerrar-itempend]').forEach(b => b.addEventListener('click', cerrarModalItem));
+modalItem.addEventListener('click', e => { if (e.target === modalItem) cerrarModalItem(); });
+
+document.getElementById('btn-guardar-itempend').addEventListener('click', () => {
+  const err = document.getElementById('modal-itempend-error');
+  const texto = document.getElementById('itempend-texto').value.trim();
+  function showErr(m) { err.textContent = m; err.classList.add('activo'); }
+  err.classList.remove('activo');
+  if (!texto) return showErr('Debe ingresar el texto.');
+
+  const p = estado.pendientes.find(x => x.id === pendienteDetalleId);
+  if (!p) return;
+  if (modalItemTipo === 'tarea') {
+    const nextId = p.tareas.reduce((m,t) => Math.max(m, t.id), 0) + 1;
+    p.tareas.push({ id: nextId, descripcion: texto, completada: false, fechaCreacion: new Date().toISOString() });
+  } else {
+    const autor = document.getElementById('itempend-autor').value;
+    if (!autor) return showErr('Debe seleccionar el autor.');
+    const nextId = p.actualizaciones.reduce((m,a) => Math.max(m, a.id), 0) + 1;
+    p.actualizaciones.push({ id: nextId, fecha: new Date().toISOString(), autor, comentario: texto });
+  }
+  guardarEstado();
+  cerrarModalItem();
+  renderDetallePendiente();
+  toast(modalItemTipo === 'tarea' ? 'Tarea agregada' : 'Actualización registrada', 'exito');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (modalPend.classList.contains('activo'))   cerrarModalPendiente();
+  if (modalItem.classList.contains('activo'))   cerrarModalItem();
+  if (document.getElementById('modal-import-overlay').classList.contains('activo')) cerrarModalImport();
+});
+
+/* ============================================================================
+   IMPORTACIÓN DEL ARCHIVO MAESTRO (.json y .xlsx/.xlsm)
+   ----------------------------------------------------------------------------
+   - JSON: reemplaza el estado completo (formato del Exportar).
+   - XLSX/XLSM: lee la primera hoja, asume primera fila como cabecera y
+     mapea por nombre de columna lo que coincida con el modelo (esfuerzo
+     razonable, sin librerías). Usa DecompressionStream del navegador.
+   ============================================================================ */
+const modalImport = document.getElementById('modal-import-overlay');
+
+function abrirModalImport() {
+  modalImport.classList.add('activo');
+  document.getElementById('import-resumen').style.display = 'none';
+  document.getElementById('input-archivo').value = '';
+}
+function cerrarModalImport() { modalImport.classList.remove('activo'); }
+document.querySelectorAll('[data-cerrar-import]').forEach(b => b.addEventListener('click', cerrarModalImport));
+modalImport.addEventListener('click', e => { if (e.target === modalImport) cerrarModalImport(); });
+
+document.getElementById('btn-importar').addEventListener('click', abrirModalImport);
+document.getElementById('btn-elegir-archivo').addEventListener('click', () => document.getElementById('input-archivo').click());
+document.getElementById('input-archivo').addEventListener('change', e => {
+  if (e.target.files[0]) procesarArchivoImport(e.target.files[0]);
+});
+
+const importZona = document.getElementById('import-zona');
+['dragenter','dragover'].forEach(ev => importZona.addEventListener(ev, e => {
+  e.preventDefault(); e.stopPropagation(); importZona.classList.add('dragover');
+}));
+['dragleave','drop'].forEach(ev => importZona.addEventListener(ev, e => {
+  e.preventDefault(); e.stopPropagation(); importZona.classList.remove('dragover');
+}));
+importZona.addEventListener('drop', e => {
+  if (e.dataTransfer.files[0]) procesarArchivoImport(e.dataTransfer.files[0]);
+});
+
+function mostrarResumenImport(html, esError = false) {
+  const el = document.getElementById('import-resumen');
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.classList.toggle('error', esError);
+}
+
+async function procesarArchivoImport(file) {
+  try {
+    const nombre = file.name.toLowerCase();
+    if (nombre.endsWith('.json')) {
+      const txt = await file.text();
+      const nuevo = JSON.parse(txt);
+      if (!Array.isArray(nuevo.equipos)) throw new Error('JSON inválido: falta arreglo "equipos".');
+      if (!Array.isArray(nuevo.registros))  nuevo.registros = [];
+      if (!Array.isArray(nuevo.pendientes)) nuevo.pendientes = [];
+      nuevo.equipos.forEach(eq => { if (!eq.estado) eq.estado = 'Operativo'; });
+      estado = nuevo;
+      guardarEstado();
+      renderTodo();
+      mostrarResumenImport(`<strong>Importación JSON exitosa.</strong><br>
+        Equipos: ${estado.equipos.length} · Registros: ${estado.registros.length} · Pendientes: ${estado.pendientes.length}`);
+      toast('Archivo JSON importado', 'exito');
+      return;
+    }
+    if (nombre.endsWith('.xlsx') || nombre.endsWith('.xlsm')) {
+      const buf = await file.arrayBuffer();
+      const resumen = await importarXLSX(buf);
+      mostrarResumenImport(resumen);
+      toast('Archivo Excel importado', 'exito');
+      return;
+    }
+    throw new Error('Formato no soportado. Use .json, .xlsx o .xlsm.');
+  } catch (err) {
+    console.error(err);
+    mostrarResumenImport(`<strong>Error al importar:</strong> ${escapeHtml(err.message)}`, true);
+  }
+}
+
+/* ============================================================================
+   LECTOR XLSX MÍNIMO (sin librerías)
+   - Descomprime el archivo ZIP usando DecompressionStream nativo
+   - Parsea sharedStrings.xml y la primera worksheet
+   - Construye filas y mapea por encabezado a las columnas del modelo
+   ============================================================================ */
+async function importarXLSX(arrayBuffer) {
+  const archivos = await unzip(arrayBuffer);
+  const ss = archivos['xl/sharedStrings.xml'] ? leerStrings(archivos['xl/sharedStrings.xml']) : [];
+  // Buscar primera worksheet
+  const wsKey = Object.keys(archivos).find(k => /^xl\/worksheets\/sheet1\.xml$/i.test(k))
+            || Object.keys(archivos).find(k => /^xl\/worksheets\/sheet\d+\.xml$/i.test(k));
+  if (!wsKey) throw new Error('No se encontró ninguna hoja en el archivo.');
+  const filas = parsearWorksheet(archivos[wsKey], ss);
+  if (!filas.length) throw new Error('La hoja está vacía.');
+
+  // Heurística: primera fila = encabezados
+  const headers = filas[0].map(h => (h || '').toString().trim());
+  const datos = filas.slice(1).filter(f => f.some(c => (c || '').toString().trim()));
+
+  // Mapeo flexible de encabezados a claves del modelo
+  const mapa = {
+    'id':'id', 'n° carpeta':'nCarpeta', 'no carpeta':'nCarpeta', 'n carpeta':'nCarpeta',
+    'n° inventario':'nInventario', 'no inventario':'nInventario', 'n inventario':'nInventario', 'inventario':'nInventario',
+    'equipo':'equipo', 'servicio':'servicio', 'unidad':'unidad', 'ubicación':'ubicacion', 'ubicacion':'ubicacion',
+    'procedencia':'procedencia', 'marca':'marca', 'modelo':'modelo', 'serie':'serie',
+    'año instalación':'anioInstalacion','año instalacion':'anioInstalacion','anio instalacion':'anioInstalacion',
+    'vida útil residual':'vidaUtilResidual','vida util residual':'vidaUtilResidual','v.u. residual':'vidaUtilResidual',
+    'clasificación':'clasificacion','clasificacion':'clasificacion',
+    'enu/baja':'enuBaja','enu':'enuBaja','baja':'enuBaja',
+    'observación':'observacion','observacion':'observacion',
+    'frecuencia mp':'frecuenciaMP','frec. mp':'frecuenciaMP','frec mp':'frecuenciaMP',
+    'responsable mp':'responsableMP','responsable':'responsableMP',
+    'estado':'estado','estado equipo':'estado',
+    'ene':'ene','enero':'ene','feb':'feb','febrero':'feb','mar':'mar','marzo':'mar',
+    'abr':'abr','abril':'abr','may':'may','mayo':'may','jun':'jun','junio':'jun',
+    'jul':'jul','julio':'jul','ago':'ago','agosto':'ago','sep':'sep','sept':'sep','septiembre':'sep',
+    'oct':'oct','octubre':'oct','nov':'nov','noviembre':'nov','dic':'dic','diciembre':'dic'
+  };
+  const indices = headers.map(h => mapa[h.toLowerCase()] || null);
+
+  const equiposImportados = [];
+  datos.forEach((fila, idx) => {
+    const eq = { id: idx + 1, programacion: {}, estado: 'Operativo' };
+    COLS_IDENT.forEach(c => { if (c.key !== 'id') eq[c.key] = ''; });
+    MESES.forEach(m => eq.programacion[m] = '');
+    fila.forEach((val, i) => {
+      const k = indices[i]; if (!k) return;
+      const v = val == null ? '' : String(val).trim();
+      if (MESES.includes(k)) {
+        const up = v.toUpperCase();
+        eq.programacion[k] = ['X','R','RA','PM'].includes(up) ? up : '';
+      } else if (k === 'id') {
+        const n = parseInt(v, 10); if (!isNaN(n)) eq.id = n;
+      } else if (k === 'estado') {
+        eq.estado = ESTADOS_EQUIPO.includes(v) ? v : 'Operativo';
+      } else {
+        eq[k] = v;
+      }
+    });
+    // Solo importar si tiene al menos N° Inventario o Equipo
+    if (eq.nInventario || eq.equipo) equiposImportados.push(eq);
+  });
+
+  if (!equiposImportados.length) throw new Error('No se identificaron equipos válidos en el archivo (revise los nombres de columnas).');
+
+  estado = { equipos: equiposImportados, registros: [], pendientes: [] };
+  guardarEstado();
+  renderTodo();
+
+  return `<strong>Importación XLSX exitosa.</strong><br>
+    Equipos importados: ${equiposImportados.length}<br>
+    <em style="font-size:11px;">Nota: los registros de ejecución y pendientes se reiniciaron. Mapeo por nombre de columna; si alguna columna no se reconoció, revise el encabezado.</em>`;
+}
+
+/* Lee sharedStrings.xml → array de strings */
+function leerStrings(xml) {
+  const doc = new DOMParser().parseFromString(xml, 'application/xml');
+  const sis = doc.getElementsByTagName('si');
+  const out = [];
+  for (let i = 0; i < sis.length; i++) {
+    // <si> puede contener <t> directo o varios <r><t>...
+    const ts = sis[i].getElementsByTagName('t');
+    let s = '';
+    for (let j = 0; j < ts.length; j++) s += ts[j].textContent;
+    out.push(s);
+  }
+  return out;
+}
+
+/* Parsea una worksheet XML → filas como array de arrays */
+function parsearWorksheet(xml, sharedStrings) {
+  const doc = new DOMParser().parseFromString(xml, 'application/xml');
+  const rows = doc.getElementsByTagName('row');
+  const filas = [];
+  let maxCol = 0;
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName('c');
+    const fila = [];
+    for (let j = 0; j < cells.length; j++) {
+      const c = cells[j];
+      const ref = c.getAttribute('r');     // ej "B3"
+      const t = c.getAttribute('t');        // tipo
+      const vEl = c.getElementsByTagName('v')[0];
+      const isEl = c.getElementsByTagName('is')[0];
+      let val = '';
+      if (t === 's' && vEl) {
+        val = sharedStrings[parseInt(vEl.textContent, 10)] || '';
+      } else if (t === 'inlineStr' && isEl) {
+        val = isEl.textContent || '';
+      } else if (vEl) {
+        val = vEl.textContent;
+      }
+      const colIdx = colLetraAIndice(ref.replace(/\d+/g,''));
+      fila[colIdx] = val;
+      if (colIdx > maxCol) maxCol = colIdx;
+    }
+    for (let k = 0; k <= maxCol; k++) if (fila[k] === undefined) fila[k] = '';
+    filas.push(fila);
+  }
+  return filas;
+}
+function colLetraAIndice(letras) {
+  let n = 0;
+  for (const ch of letras) n = n * 26 + (ch.charCodeAt(0) - 64);
+  return n - 1;
+}
+
+/* ============================================================================
+   UNZIP NATIVO USANDO DecompressionStream('deflate-raw')
+   - Lee el End of Central Directory, central directory, y cada entrada
+   - Soporta entradas STORED (0) y DEFLATE (8)
+   ============================================================================ */
+async function unzip(arrayBuffer) {
+  const data = new Uint8Array(arrayBuffer);
+  const view = new DataView(arrayBuffer);
+  const td = new TextDecoder('utf-8');
+
+  // Buscar EOCD (Signature 0x06054b50) desde el final
+  let eocdPos = -1;
+  for (let i = data.length - 22; i >= Math.max(0, data.length - 65557); i--) {
+    if (view.getUint32(i, true) === 0x06054b50) { eocdPos = i; break; }
+  }
+  if (eocdPos < 0) throw new Error('No es un archivo ZIP válido (sin EOCD).');
+
+  const totalEntries = view.getUint16(eocdPos + 10, true);
+  const cdOffset     = view.getUint32(eocdPos + 16, true);
+
+  const archivos = {};
+  let p = cdOffset;
+  for (let e = 0; e < totalEntries; e++) {
+    if (view.getUint32(p, true) !== 0x02014b50) throw new Error('Encabezado de directorio central inválido.');
+    const compMethod   = view.getUint16(p + 10, true);
+    const compSize     = view.getUint32(p + 20, true);
+    const fnLen        = view.getUint16(p + 28, true);
+    const extraLen     = view.getUint16(p + 30, true);
+    const commentLen   = view.getUint16(p + 32, true);
+    const localHdrOff  = view.getUint32(p + 42, true);
+    const fileName     = td.decode(data.subarray(p + 46, p + 46 + fnLen));
+    p += 46 + fnLen + extraLen + commentLen;
+
+    // Leer local file header para conocer tamaño real de nombre/extra
+    if (view.getUint32(localHdrOff, true) !== 0x04034b50) throw new Error('Local file header inválido.');
+    const lfFnLen    = view.getUint16(localHdrOff + 26, true);
+    const lfExtraLen = view.getUint16(localHdrOff + 28, true);
+    const dataStart  = localHdrOff + 30 + lfFnLen + lfExtraLen;
+    const slice = data.subarray(dataStart, dataStart + compSize);
+
+    let contenido;
+    if (compMethod === 0) {
+      contenido = td.decode(slice);
+    } else if (compMethod === 8) {
+      if (typeof DecompressionStream === 'undefined') {
+        throw new Error('Su navegador no soporta DecompressionStream. Use Chrome/Edge actualizado.');
+      }
+      const ds = new DecompressionStream('deflate-raw');
+      const blob = new Blob([slice]);
+      const stream = blob.stream().pipeThrough(ds);
+      const buf = await new Response(stream).arrayBuffer();
+      contenido = td.decode(new Uint8Array(buf));
+    } else {
+      // Métodos no soportados → omitir
+      continue;
+    }
+    archivos[fileName] = contenido;
+  }
+  return archivos;
+}
+
+/* ============================================================================
    BOTONES UTILIDAD HEADER
    ============================================================================ */
 document.getElementById('btn-exportar').addEventListener('click', exportarJSON);
@@ -1269,8 +2857,12 @@ function renderTodo() {
   renderPMP();
   renderRegistro();
   renderInventario();
+  renderPendientes();
   if (document.getElementById('vista-historial').classList.contains('activa')) {
     renderHistorial();
+  }
+  if (document.getElementById('vista-pendiente-detalle').classList.contains('activa')) {
+    renderDetallePendiente();
   }
 }
 
